@@ -1,0 +1,35 @@
+{
+  "name": "share-frame",
+  "version": "1.0.0",
+  "description": "Share, Contribute, and Support projects on ShareFrame",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoftwareFuze/ShareFrame.git"
+  },
+  "keywords": [
+    "ShareFrame",
+    "Software",
+    "Support",
+    "Contribute",
+    "Share"
+  ],
+  "author": "Atticus C <atticus@softwarefuze.com> (https://softwarefuze.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoftwareFuze/ShareFrame/issues"
+  },
+  "homepage": "https://github.com/SoftwareFuze/ShareFrame#readme",
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.6.3",
+    "nodemon": "^2.0.12",
+    "pg": "^8.7.1"
+  }
+}
