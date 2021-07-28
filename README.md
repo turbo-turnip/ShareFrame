@@ -1,6 +1,7 @@
 # ShareFrame Project
 [![Watch on GitHub](https://img.shields.io/github/watchers/SoftwareFuze/ShareFrame.svg?style=social)](https://github.com/SoftwareFuze/ShareFrame/watchers)
 [![Star on GitHub](https://img.shields.io/github/stars/SoftwareFuze/ShareFrame.svg?style=social)](https://github.com/SoftwareFuze/ShareFrame/stargazers)
+[![Fork on GitHub](https://img.shields.io/github/forks/SoftwareFuze/ShareFrame.svg?style=social)](https://github.com/SoftwareFuze/ShareFrame/network/membrers)
 
 ## About ShareFrame
 ShareFrame is a new project I am working on where developers can share their projects on the ShareFrame platform.
