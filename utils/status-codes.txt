@@ -1,0 +1,15 @@
+HTTP Response Status Codes
+
+Note that there are more HTTP response status codes, these are just the ones I think I'll need for this project
+
+200 - OK                      (Everything went ok)
+201 - Created                 (Initialized or established something successfully)
+202 - Accepted                (Request body was accepted)
+400 - Bad Request             (Invalid request type or form)
+401 - Unauthorized            (Request unauthorized for endpoint or route)
+403 - Forbidden               (Request or client is forbidden)
+406 - Not Acceptable          (Request body wasn't accepted)
+413 - Payload Too Large       (Request body or payloads in headers too large)
+418 - I'm a teapot            (tha fawk is this)
+429 - Too many requests       (Too many requests to the server)
+500 - Internal Server Error   (An error in the server occurred)
