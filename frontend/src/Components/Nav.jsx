@@ -27,7 +27,7 @@ const Nav = ({ isLoggedIn, account }) => {
                 <Link to="/discover">Discover</Link>
                 <Link to="/create">Create</Link>
                 {
-                    !isLoggedIn ?
+                    (!isLoggedIn) ?
                         <React.Fragment>
                             <button>
                                 <Link to="/register">Register</Link>
@@ -38,7 +38,7 @@ const Nav = ({ isLoggedIn, account }) => {
                         </React.Fragment>
                     :
                         <React.Fragment>
-                            <img src={account.pfp} alt={account.username} />
+                            <img src={(account && account.pfp) ? account.pfp : "/media/pfp-default.svg"} alt={account && account.user_name} />
                             <button className="account-btn">
                                 <Link to="/account">Account</Link>
                             </button>

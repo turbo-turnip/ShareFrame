@@ -32,5 +32,8 @@
     "nodemailer": "^6.6.3",
     "nodemon": "^2.0.12",
     "pg": "^8.7.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
   }
 }
