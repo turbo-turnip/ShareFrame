@@ -1,11 +1,15 @@
 import './styles/main.css';
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import HomePage from './Pages/HomePage/LoggedFalse/Home';
 
 const App = () => {
     return (
-        <div>
-            <h1>Hello, world!</h1>
-        </div>
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/" component={HomePage} />
+            </Switch>
+        </BrowserRouter>
     );
 }
 
