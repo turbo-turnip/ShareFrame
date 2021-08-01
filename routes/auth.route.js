@@ -71,4 +71,37 @@ router.post('/refresh', async (req, res) => {
     }
 });
 
+router.post('/register', async (req, res) => {
+    const { username, email, password } = req.body;
+
+    if (!validate()) {
+        res.status(400).json({ status: "Invalid fields" });
+        return;
+    }
+
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND user_email = $2', [ username, email ]);
+    if (!userExists.rows.length > 0) {
+        try {
+            const hashed = await bcrypt.hash(password, 10);
+            const emailValid = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
+            if (!emailValid) {
+                res.status(406).json({ message: "Invalid email" });
+                return;
+            }
+
+            await db.query('INSERT INTO users (user_name, user_email, user_pass, pfp, verified) VALUES ($1, $2, $3, $4, $5)', [
+                username,
+                email,
+                hashed,
+                '/media/pfp-default.svg',
+                'TRUE'
+            ]);
+
+            res.status(201).json({ message: "Successfully registered " + username });
+        } catch (err) {
+            res.status(500).json({ err });
+        }
+    } else res.status(409).json({ message: "User already exists" });
+});
+
 module.exports = router;
