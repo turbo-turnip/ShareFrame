@@ -57,7 +57,7 @@ router.post('/refresh', async (req, res) => {
                     const validPass = await bcrypt.compare(valid['password'], rows.rows[0].user_pass);
 
                     if (validPass) {
-                        const at = await jwt.sign(rows.rows[0], process.env.AT_SECRET, { expiresIn: 60 * 15 });
+                        const at = await jwt.sign({ username: rows.rows[0].user_name, email: rows.rows[0].user_email, password: valid['password'] }, process.env.AT_SECRET, { expiresIn: 60 * 15 });
                         const rt = await jwt.sign({ id: valid['id'], password: valid['password'] }, process.env.RT_SECRET, { expiresIn: 60 * 60 * 24 * 30 });
                         await db.query('INSERT INTO rt_banishlist (rt) VALUES ($1)', [ token ]);
 

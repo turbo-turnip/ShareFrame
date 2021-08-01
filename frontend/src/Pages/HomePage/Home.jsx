@@ -24,7 +24,7 @@ const Home = () => {
                         setAccount(response.account);
                     }
                 });
-        } else if (window.localStorage.hasOwnProperty('rt') && window.localStorage.getItem('rt' && !window.localStorage.getItem('at'))) {
+        } else if (window.localStorage.hasOwnProperty('rt') && window.localStorage.getItem('rt') && !window.localStorage.getItem('at')) {
             fetch("http://localhost:8000/auth/refresh", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
