@@ -75,7 +75,7 @@ router.post('/refresh', async (req, res) => {
 router.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
-    if (!validate()) {
+    if (!validate([ username, email, password ])) {
         res.status(400).json({ status: "Invalid fields" });
         return;
     }
@@ -103,6 +103,35 @@ router.post('/register', async (req, res) => {
             res.status(500).json({ err });
         }
     } else res.status(409).json({ message: "User already exists" });
+});
+
+router.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!validate([ username, password ])) {
+        res.status(400).json({ status: "Invalid fields" });
+        return;
+    }
+
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1', [ username ]);
+    if (userExists.rows.length > 0) {
+        try {
+            const passCorrect = await bcrypt.compare(password, userExists.rows[0].user_pass);
+
+            if (passCorrect) {
+                const at = jwt.sign({
+                    username, email: userExists.rows[0].user_email, password
+                }, process.env.AT_SECRET, { expiresIn: 60 * 15 });
+                const rt = jwt.sign({
+                    id: userExists.rows[0].user_id, password
+                }, process.env.RT_SECRET, { expiresIn: 60 * 60 * 24 * 30 });
+
+                res.status(200).json({ message: "Successfully logged in " + username, at, rt });
+            } else res.status(403).json({ message: "Invalid password" });
+        } catch (err) {
+            res.status(500).json({ err });
+        }
+    } else res.status(409).json({ message: "Invalid username" });
 });
 
 router.post('/verificationEmail', (req, res) => {

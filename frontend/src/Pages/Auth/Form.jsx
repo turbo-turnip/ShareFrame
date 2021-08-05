@@ -25,7 +25,7 @@ const Form = ({ type, submitHandler }) => {
                     <label>Password</label>
                     <input type="password" placeholder="e.g. V3rY sTr0nG p4sSw0rD" required />
                 </div>
-                <Link to="/login">Have an account? Login</Link>
+                {type === "register" ? <Link to="/login">Have an account? Login</Link> : <Link to="/register">Don't have an account? Register</Link>}
                 <Link to="/">Back home</Link>
             </div>
 
