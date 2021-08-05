@@ -381,3 +381,38 @@ nav.navbar .nav-links img {
     background: rgb(35, 194, 35);
     z-index: 1000;
 }
+
+.verification-page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.verification-page .verify {
+    width: 350px;
+    padding: 1em;
+    background: var(--dark-1);
+    border-radius: 10px;
+}
+
+.verification-page .verify p {
+    margin-top: .8em;
+}
+
+.verification-page .verify button {
+    margin-top: 1.3em;
+    font-size: 1.2em;
+    padding: .3em .5em;
+    width: 100%;
+    border-radius: 30px;
+    border: none;
+    background: var(--dark-3);
+    transition: .4s;
+}
+
+.verification-page .verify button:hover {
+    cursor: pointer;
+    background: rgba(15, 37, 61, 0.5);
+}

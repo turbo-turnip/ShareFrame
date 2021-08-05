@@ -2,6 +2,7 @@ const Router = require('express').Router;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { validateInputs: validate, pool: db } = require('../database');
+const { email: emailer } = require('../email');
 
 require('dotenv').config();
 // initialize auth router
@@ -102,6 +103,39 @@ router.post('/register', async (req, res) => {
             res.status(500).json({ err });
         }
     } else res.status(409).json({ message: "User already exists" });
+});
+
+router.post('/verificationEmail', (req, res) => {
+    const { username, email } = req.body;
+
+    const verifyPath = 
+        "http://localhost:3000/verify/" 
+        + new Buffer.from(username, 'utf8').toString('hex') 
+        + "/" 
+        + new Buffer.from(email, 'utf8').toString('hex');
+
+    emailer({
+        from: process.env.BOT_EMAIL,
+        to: email,
+        subject: 'Verify your ShareFrame email',
+        html: `
+            <h1>Hi ${username},</h1>
+            <h3>To get the full potential of your ShareFrame account, you have to verify your email! (${email})</h3>
+            <a href="${verifyPath}">
+                <img width="500px" src="cid:verification-image@shareframe.backend" alt="Verify your email!" />
+            </a>
+        `,
+        attachments: [{
+            filename: 'verify.png',
+            path: __dirname + '/verify.png',
+            cid: 'verification-image@shareframe.backend'
+        }]
+    })
+        .then(res => {
+            console.log(res);
+        });
+
+    res.status(200).json({});
 });
 
 module.exports = router;
