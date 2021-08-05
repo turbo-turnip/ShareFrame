@@ -382,7 +382,8 @@ nav.navbar .nav-links img {
     z-index: 1000;
 }
 
-.verification-page {
+.verification-page,
+.verify-page {
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -390,18 +391,18 @@ nav.navbar .nav-links img {
     align-items: center;
 }
 
-.verification-page .verify {
+.verify {
     width: 350px;
     padding: 1em;
     background: var(--dark-1);
     border-radius: 10px;
 }
 
-.verification-page .verify p {
+.verify p {
     margin-top: .8em;
 }
 
-.verification-page .verify button {
+.verify button {
     margin-top: 1.3em;
     font-size: 1.2em;
     padding: .3em .5em;
@@ -412,7 +413,7 @@ nav.navbar .nav-links img {
     transition: .4s;
 }
 
-.verification-page .verify button:hover {
+.verify button:hover {
     cursor: pointer;
     background: rgba(15, 37, 61, 0.5);
 }

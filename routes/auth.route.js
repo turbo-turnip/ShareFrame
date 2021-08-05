@@ -95,7 +95,7 @@ router.post('/register', async (req, res) => {
                 email,
                 hashed,
                 '/media/pfp-default.svg',
-                'TRUE'
+                'FALSE'
             ]);
 
             res.status(201).json({ message: "Successfully registered " + username });
@@ -136,6 +136,34 @@ router.post('/verificationEmail', (req, res) => {
         });
 
     res.status(200).json({});
+});
+
+router.post('/verify', async (req, res) => {
+    const { encryptedUsername, encryptedEmail, password } = req.body;
+
+    const [ username, email ] = 
+        [ encryptedUsername, encryptedEmail ].map((value) => new Buffer.from(value, 'hex').toString('utf8'));
+
+    console.log(username, email);
+
+    if (validate([ username, email ])) {
+        const rows = await db.query('SELECT * FROM users WHERE user_name = $1 AND user_email = $2 AND verified = $3', [ username, email, 'FALSE' ]);
+
+        if (rows.rows.length > 0) {
+            const at = await jwt.sign({
+                username: rows.rows[0].user_name,
+                email: rows.rows[0].user_email,
+                password
+            }, process.env.AT_SECRET, { expiresIn: 60 * 15 });
+            const rt = await jwt.sign({
+                id: rows.rows[0].user_id,
+                password
+            }, process.env.RT_SECRET, { expiresIn: 60 * 60 * 24 * 30 });
+
+            await db.query('UPDATE users SET verified = $1 WHERE user_name = $2 AND user_email = $3', [ 'TRUE', username, email ]);
+            res.status(200).json({ at, rt });
+        } else res.status(400).json({ message: "User doesn't exist" });
+    } else res.status(400).json({ message: "Invalid fields" });
 });
 
 module.exports = router;

@@ -3,17 +3,16 @@ import { BACKEND_PATH, join } from '../../PATH';
 
 const Verification = ({ email, username }) => {
     const sendEmail = async () => {
+        // eslint-disable-next-line
         const request = await fetch(join(BACKEND_PATH, "/auth/verificationEmail"), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email })
         });
-        const response = await request.json();
-
-        console.log(request.status);
     }
 
-    useEffect(sendEmail, []);
+    // eslint-disable-next-line
+    useEffect(() => sendEmail(), []);
     
     return (
         <div className="verification-page">
