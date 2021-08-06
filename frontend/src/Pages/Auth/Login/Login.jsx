@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import Form from '../Form';
 import { BACKEND_PATH, join } from '../../../PATH';
 import Popup from '../../../Components/Popup';
+import { Redirect } from 'react-router-dom';
 
 const Register = () => {
     const [ showPopup, setShowPopup ] = useState(false);
     const [ popupMessage, setPopupMessage ] = useState();
     const [ popupType, setPopupType ] = useState();
+    const [ loggedIn, setLoggedIn ] = useState(false);
 
     const submitHandler = async (e) => {
         const [ name, password ] = e.target.querySelectorAll("input");
@@ -39,6 +41,7 @@ const Register = () => {
 
             setTimeout(() => {
                 setShowPopup(false);
+                setLoggedIn(true);
             }, 5 * 1000 + 200);
         }
     }
@@ -46,6 +49,7 @@ const Register = () => {
     return (
         <div className="auth-page">
             {showPopup && <Popup message={popupMessage} type={popupType} />}
+            {loggedIn && <Redirect to="/" />}
             <h1>Login</h1>
             <Form type="login" submitHandler={submitHandler} />
         </div>

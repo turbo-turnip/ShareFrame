@@ -2,41 +2,20 @@ import React, { useEffect, useState } from 'react';
 import Nav from '../../Components/Nav';
 import Banner from './Banner';
 import Panel from './Panel';
+import isLoggedIn from '../../IsLoggedIn';
 
 const Home = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
     const [ account, setAccount ] = useState();
 
     useEffect(() => {
-        if (window.localStorage.hasOwnProperty('at') && window.localStorage.getItem('at')) {
-            fetch("http://localhost:8000/auth/validateToken", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    token: window.localStorage.getItem('at')
-                })
-            })
-                .then(async res => {
-                    const response = await res.json();
-                    
-                    if (response.account) {
-                        setLoggedIn(true);
-                        setAccount(response.account);
-                    }
-                });
-        } else if (window.localStorage.hasOwnProperty('rt') && window.localStorage.getItem('rt') && !window.localStorage.getItem('at')) {
-            fetch("http://localhost:8000/auth/refresh", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    token: window.localStorage.getItem('rt')
-                })
-            })
-                .then(async res => {
-                    const response = await res.json();
-                    console.log(response);
-                });
-        }
+        isLoggedIn(window.localStorage)
+            .then(res => {
+                if (res.loggedIn) {
+                    setLoggedIn(true);
+                    setAccount(res.account);
+                }
+            });
     }, []);
 
     return (
