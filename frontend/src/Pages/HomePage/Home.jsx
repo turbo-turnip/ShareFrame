@@ -11,6 +11,7 @@ const Home = () => {
     useEffect(() => {
         isLoggedIn(window.localStorage)
             .then(res => {
+                console.log(res);
                 if (res.loggedIn) {
                     setLoggedIn(true);
                     setAccount(res.account);

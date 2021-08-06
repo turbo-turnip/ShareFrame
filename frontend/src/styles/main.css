@@ -4,7 +4,7 @@
 :root {
     --light-blue: rgb(36, 182, 255);
     --dark-1: rgb(43, 61, 82);
-    --dark-2: rgb(29, 43, 58);
+    --dark-2: rgb(27, 43, 59);
     --dark-3: rgb(15, 37, 61);
 }
 
@@ -316,7 +316,7 @@ nav.navbar .nav-links img {
     margin-top: .8em;
 }
 
-.auth-form .auth-field > input {
+input {
     font-size: 1.2em;
     padding: .3em .6em;
     border-radius: 6px;
@@ -324,7 +324,7 @@ nav.navbar .nav-links img {
     background: var(--dark-1);
 }
 
-.auth-form .auth-field > input:focus {
+input:focus {
     outline: none;
     border: 2px solid var(--light-blue);
 }
@@ -333,7 +333,7 @@ nav.navbar .nav-links img {
     font-size: 1.2em;
 }
 
-.auth-form .auth-field > input::placeholder {
+input::placeholder {
     color: #fff;
 }
 
@@ -416,4 +416,77 @@ nav.navbar .nav-links img {
 .verify button:hover {
     cursor: pointer;
     background: rgba(15, 37, 61, 0.5);
+}
+
+.new-project {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.new-project > h1 {
+    font-size: 2.5em;
+    font-family: 'Zen Dots';
+}
+
+.new-project > h4 {
+    font-size: 1.5em;
+    margin-bottom: .2em;
+    margin-top: 1em;
+}
+
+.new-project .field-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.new-project .field-container .input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-right: 1em;
+}
+
+.new-project .field-container .input label {
+    font-size: 1.2em;
+    margin-bottom: .2em;
+}
+
+.new-project .field-container .input input[type=text] {
+    width: 300px;
+}
+
+input[type=checkbox] {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 70px;
+    height: 30px;
+    border-radius: 50px;
+    position: relative;
+    margin-top: .3em;
+}
+
+input[type=checkbox]::after {
+    content: "";
+    width: 35px;
+    height: 35px;
+    background: var(--dark-2);
+    box-shadow: 0 1px 2px 1px #0008;
+    position: absolute;
+    border-radius: 50%;
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: .4s;
+}
+
+input[type=checkbox]:checked::after {
+    left: calc(60% + 3px);
+    background: var(--dark-2);
+}
+
+input[type=checkbox]:checked {
+    background: var(--light-blue);
 }

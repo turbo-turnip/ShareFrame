@@ -5,6 +5,7 @@ import HomePage from './Pages/HomePage/Home';
 import Register from './Pages/Auth/Register/Register';
 import Login from './Pages/Auth/Login/Login';
 import Verify from './Pages/Auth/Verify';
+import Create from './Pages/Create/Create';
 
 const App = () => {
     return (
@@ -14,6 +15,7 @@ const App = () => {
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
                 <Route path="/verify" component={Verify} />
+                <Route exact path="/create" component={Create} />
             </Switch>
         </BrowserRouter>
     );

@@ -1,7 +1,7 @@
 const PATH = {};
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    PATH.FRONTENT_PATH = "http://localhost:3000";
+    PATH.FRONTEND_PATH = "http://localhost:3000";
     PATH.BACKEND_PATH = "http://localhost:8000";
 } else {
     PATH.FRONTEND_PATH = "[the frontend domain eventually]";
