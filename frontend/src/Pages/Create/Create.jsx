@@ -7,6 +7,22 @@ const Create = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
     const [ account, setAccount ] = useState();
     const [ github, setGithub ] = useState({ username: "", repo: "" });
+    const [ submitErrors, setSubmitErrors ] = useState([]);
+
+    const createProjectHandler = async (e) => {
+        e.preventDefault();
+
+        const [ title, desc, shortDesc, , , allFeedback, allReviews, allThreads ] = e.target.parentElement.querySelectorAll("input");
+
+        if (github.repo !== "" || github.username !== "") {
+            const githubRequest = await fetch(`https://api.github.com/repos/${github.username}/${github.repo}`);
+            if (githubRequest.status === 404) {
+                setSubmitErrors((prevState) => [...prevState, "Invalid Github Repository"]);
+            }
+        } else {
+            setSubmitErrors([]);
+        }
+    }
 
     useEffect(() => {
         isLoggedIn(window.localStorage)
@@ -23,21 +39,26 @@ const Create = () => {
     return (
         <React.Fragment>
             <Nav isLoggedIn={loggedIn} account={loggedIn ? account : null} />
-            <div className="new-project">
+            <form className="new-project" onSubmit={createProjectHandler}>
+
                 <h1>New Project</h1>
+                {submitErrors.map(error => 
+                    <div className="submit-error">
+                        <h4>{error}</h4>
+                    </div>)}
                 <h4>About The Project</h4>
                 <div className="field-container">
                     <div className="input">
                         <label>Project Title</label>
-                        <input type="text" placeholder="e.g. My Chess App" maxLength="25" />
+                        <input required type="text" placeholder="e.g. My Chess App" maxLength="25" />
                     </div>
                     <div className="input">
                         <label>Project Description</label>
-                        <input type="text" placeholder="e.g. This project is for users to..." maxLength="120" />
+                        <input type="text" placeholder="e.g. This project is for users to..." maxLength="120" required />
                     </div>
                     <div className="input">
                         <label>Project Short Description</label>
-                        <input type="text" placeholder="e.g. Play chess online." maxLength="50" />
+                        <input type="text" placeholder="e.g. Play chess online." maxLength="50" required />
                     </div>
                 </div>
                 <h4>Version Control</h4>
@@ -79,7 +100,8 @@ const Create = () => {
                         <input type="checkbox" />
                     </div>
                 </div>
-            </div>
+                <button type="submit">Create Project</button>
+            </form>
         </React.Fragment>
     );
 }

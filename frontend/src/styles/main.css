@@ -490,3 +490,26 @@ input[type=checkbox]:checked::after {
 input[type=checkbox]:checked {
     background: var(--light-blue);
 }
+
+.new-project button:last-child {
+    font-size: 1.5em;
+    padding: .3em 2em;
+    border-radius: 50px;
+    border: none;
+    background: var(--dark-1);
+    margin-top: 2em;
+    transition: .4s;
+}
+
+.new-project button:last-child:hover {
+    cursor: pointer;
+    background: rgba(43, 61, 82, 0.6)
+}
+
+.submit-error {
+    background: rgb(228, 72, 72);
+    width: max-content;
+    padding: .5em 1em;
+    border-radius: 6px;
+    margin-top: 1em;
+}
