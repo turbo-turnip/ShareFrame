@@ -11,7 +11,9 @@ router.post('/createProject', async (req, res) => {
     if (validate([ title, desc, shortDesc, username, pfp, github.repo, github.username, allFeedback, allReviews, allThreads ])) {
         const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, username ]);
 
-        if (!exists.rows.length > 0) {
+        if (exists.rows.length > 0)
+            res.status(409).json({ message: "Project already exists. Use a different name" });
+        else {
             await db.query(`INSERT INTO projects (
                 project_title,
                 project_desc,
@@ -44,7 +46,7 @@ router.post('/createProject', async (req, res) => {
                 '[]'
             ]);
             res.status(201).json({ message: "Successfully created project" });
-        } else res.status(409).json({ message: "Project already exists. Use a different name" });
+        }
     } else res.status(400).json({ message: "Invalid Fields" });
 });
 

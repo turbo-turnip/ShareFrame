@@ -2,28 +2,30 @@ import React, { useState, useEffect } from 'react';
 import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
 import { FRONTEND_PATH, BACKEND_PATH, join } from '../../PATH';
+import Popup from '../../Components/Popup';
 
 const Create = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
     const [ account, setAccount ] = useState();
     const [ github, setGithub ] = useState({ username: "", repo: "" });
     const [ submitErrors, setSubmitErrors ] = useState([]);
+    const [ success, setSuccess ] = useState(false);
+    const [ error, setError ] = useState(null);
 
     const createProjectHandler = async (e) => {
         e.preventDefault();
 
         const [ title, desc, shortDesc, , , allFeedback, allReviews, allThreads ] = e.target.parentElement.querySelectorAll("input");
 
-        if (github.repo !== "" || github.username !== "") {
+        if (github.username !== "" || github.repo !== "") {
             const githubRequest = await fetch(`https://api.github.com/repos/${github.username}/${github.repo}`);
+
             if (githubRequest.status === 404) {
                 setSubmitErrors((prevState) => [...prevState, "Invalid Github Repository"]);
-            }
-        } else {
-            setSubmitErrors([]);
-
-            console.log('adding project')
-
+            } 
+        }
+        
+        if (submitErrors.length === 0) {
             const request = await fetch(join(BACKEND_PATH, "/project/createProject"), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -41,7 +43,10 @@ const Create = () => {
             });
             const response = await request.json();
 
-            console.log(response);
+            if (response.status === 201)
+                setSuccess(true);
+            else
+                setError(response.message);
         }
     }
 
@@ -59,6 +64,8 @@ const Create = () => {
 
     return (
         <React.Fragment>
+            {success && <Popup type="success" message="Successfully created project" />}
+            {error && <Popup type="error" message={error} />}
             <Nav isLoggedIn={loggedIn} account={loggedIn ? account : null} />
             <form className="new-project" onSubmit={createProjectHandler}>
 

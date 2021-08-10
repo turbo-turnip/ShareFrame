@@ -370,16 +370,16 @@ input::placeholder {
     padding: .5em .8em;
     border-radius: 6px;
     transition: .4s;
+    z-index: 10000000000000000000000000000000000000; /* just to make sure it is on top of everything 😉 */
+    /* ^^^^^^^^^ very necessary. 😅 */
 }
 
 .popup-error {
     background: rgb(228, 72, 72);
-    z-index: 1000;
 }
 
 .popup-success {
     background: rgb(35, 194, 35);
-    z-index: 1000;
 }
 
 .verification-page,
