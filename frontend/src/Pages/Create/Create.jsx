@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
-import { FRONTEND_PATH, join } from '../../PATH';
+import { FRONTEND_PATH, BACKEND_PATH, join } from '../../PATH';
 
 const Create = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
@@ -22,7 +22,26 @@ const Create = () => {
         } else {
             setSubmitErrors([]);
 
-            // const request = await fetch
+            console.log('adding project')
+
+            const request = await fetch(join(BACKEND_PATH, "/project/createProject"), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: title.value,
+                    desc: desc.value,
+                    shortDesc: shortDesc.value,
+                    username: account.user_name,
+                    pfp: account.pfp,
+                    github,
+                    allFeedback: allFeedback.value,
+                    allReviews: allReviews.value,
+                    allThreads: allThreads.value
+                })
+            });
+            const response = await request.json();
+
+            console.log(response);
         }
     }
 

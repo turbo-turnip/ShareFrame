@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const authRouter = require('./routes/auth.route');
+const projectRouter = require('./routes/project.route');
 
 // necessary setup
 const app = express();
@@ -16,6 +17,7 @@ app.use(cors(corsConfig));
 app.use(express.json());
 
 app.use('/auth', authRouter);
+app.use('/project', projectRouter);
 
 // main ReST API
 app.get('/', (req, res) => {
