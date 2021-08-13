@@ -27,5 +27,11 @@ And on ShareFrame, Supporters will be able to:
 - Comment on project updates
 
 ## ShareFrame project current development status
-__Version 1.0.0__ Working on backend & frontend
+__Version 1.0.0__ Working on project creation
 
+## Bugs / Things to fix later
+- Create interface for password on verification page instead of popup
+- Debug create page
+- Make a more user friendly interface for create page
+- Create page redesign 
+- Fix popup bugs

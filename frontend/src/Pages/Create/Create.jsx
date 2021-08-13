@@ -3,6 +3,7 @@ import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
 import { FRONTEND_PATH, BACKEND_PATH, join } from '../../PATH';
 import Popup from '../../Components/Popup';
+import { Redirect } from 'react-router-dom';
 
 const Create = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
@@ -10,22 +11,11 @@ const Create = () => {
     const [ github, setGithub ] = useState({ username: "", repo: "" });
     const [ submitErrors, setSubmitErrors ] = useState([]);
     const [ success, setSuccess ] = useState(false);
-    const [ error, setError ] = useState(null);
+    const [ redirect, setRedirect ] = useState(false);
+    const [ error, setError ] = useState(false);
 
-    const createProjectHandler = async (e) => {
-        e.preventDefault();
-
-        const [ title, desc, shortDesc, , , allFeedback, allReviews, allThreads ] = e.target.parentElement.querySelectorAll("input");
-
-        if (github.username !== "" || github.repo !== "") {
-            const githubRequest = await fetch(`https://api.github.com/repos/${github.username}/${github.repo}`);
-
-            if (githubRequest.status === 404) {
-                setSubmitErrors((prevState) => [...prevState, "Invalid Github Repository"]);
-            } 
-        }
-        
-        if (submitErrors.length === 0) {
+    const createProject = async (title, desc, shortDesc, username, pfp, github, allFeedback, allReviews, allThreads) => {
+        return new Promise(async (resolve) => {
             const request = await fetch(join(BACKEND_PATH, "/project/createProject"), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -33,20 +23,64 @@ const Create = () => {
                     title: title.value,
                     desc: desc.value,
                     shortDesc: shortDesc.value,
-                    username: account.user_name,
-                    pfp: account.pfp,
+                    username: username,
+                    pfp: pfp,
                     github,
                     allFeedback: allFeedback.value,
                     allReviews: allReviews.value,
                     allThreads: allThreads.value
                 })
             });
+
             const response = await request.json();
 
-            if (response.status === 201)
-                setSuccess(true);
-            else
-                setError(response.message);
+            resolve({ ...response, status: request.status });
+        });
+    }
+
+    const createProjectHandler = async (e) => {
+        e.preventDefault();
+
+        setSuccess(false);
+        setError(false);
+        setRedirect(false);
+        let currSubmitErrors = [];
+        setSubmitErrors([]);
+
+        const [ title, desc, shortDesc, , , allFeedback, allReviews, allThreads ] = e.target.parentElement.querySelectorAll("input");
+
+        if (github.username !== "" || github.repo !== "") {
+            const githubRequest = await fetch(`https://api.github.com/repos/${github.username}/${github.repo}`);
+
+            if (githubRequest.status === 404) {
+                currSubmitErrors.push("Invalid Github Repository");
+                setSubmitErrors((prevState) => [...prevState, "Invalid Github Repository"]);
+            } 
+        }
+
+        if (/(!|@|#|\$|%|\^|&|\*|\(|\)|=|\+|`|~|\[|\]|\{|\}|"|'|<|>|\?|\/|;|:)/g.test(title.value)) {
+            currSubmitErrors.push("Title must not include special characters");
+            setSubmitErrors((prevState) => [...prevState, "Title must not include special characters"]);
+        }
+
+        if (submitErrors.length === 0 && currSubmitErrors.length === 0) {
+            createProject(title, desc, shortDesc, account.user_name, account.pfp, github, allFeedback, allReviews, allThreads)
+                .then(response => {
+
+                    console.log(response);
+                    
+                    if (response.status === 201) {
+                        setSuccess(true);
+                        setTimeout(() => {
+                            setRedirect(title.value);
+                        }, 1 * 5000 + 200);
+                    } else {
+                        setError(response.message);
+                        setTimeout(() => {
+                            setError(false);
+                        }, 1 * 5000 + 200);
+                    }
+                });
         }
     }
 
@@ -64,11 +98,11 @@ const Create = () => {
 
     return (
         <React.Fragment>
+            {redirect && <Redirect to={`/project?name=${redirect}`} />}
             {success && <Popup type="success" message="Successfully created project" />}
             {error && <Popup type="error" message={error} />}
             <Nav isLoggedIn={loggedIn} account={loggedIn ? account : null} />
             <form className="new-project" onSubmit={createProjectHandler}>
-
                 <h1>New Project</h1>
                 {submitErrors.map(error => 
                     <div className="submit-error">
