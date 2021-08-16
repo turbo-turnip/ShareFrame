@@ -572,12 +572,24 @@ input[type=checkbox]:checked {
     font-size: 1.2em;
     padding: .5em 0;
     background: var(--dark-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.project-banner .banner-views > span:first-of-type {
-    border-radius: 0 0 0 12px;
+.project-banner .banner-views > span:not(:first-child) {
+    border-left: 1px solid var(--dark-3);
 }
 
-.project-banner .banner-views > span:last-of-type {
-    border-radius: 0 0 12px 0;
+.project-banner .banner-views > span > h4.count {
+    background: var(--dark-1);
+    width: max-content;
+    min-width: 30px;
+    height: 30px;
+    border-radius: 100px;
+    font-size: 0.9em;
+    margin-left: .5em;
+    display: grid;
+    place-items: center;
+    font-weight: 400;
 }
