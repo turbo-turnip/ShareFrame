@@ -513,3 +513,43 @@ input[type=checkbox]:checked {
     border-radius: 6px;
     margin-top: 1em;
 }
+
+.project-page {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.project-page .url-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80vw;
+}
+
+.project-page > .project-banner {
+    width: 100%;
+    background: var(--dark-1);
+    height: 200px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 8%;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-page > .project-banner > *:not(img) {
+    font-family: 'Zen Dots';
+    z-index: 2;
+}
+
+.project-page .project-banner > img {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    z-index: 1;
+}

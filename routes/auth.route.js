@@ -173,8 +173,6 @@ router.post('/verify', async (req, res) => {
     const [ username, email ] = 
         [ encryptedUsername, encryptedEmail ].map((value) => new Buffer.from(value, 'hex').toString('utf8'));
 
-    console.log(username, email);
-
     if (validate([ username, email ])) {
         const rows = await db.query('SELECT * FROM users WHERE user_name = $1 AND user_email = $2 AND verified = $3', [ username, email, 'FALSE' ]);
 

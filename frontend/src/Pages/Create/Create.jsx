@@ -11,7 +11,6 @@ const Create = () => {
     const [ github, setGithub ] = useState({ username: "", repo: "" });
     const [ submitErrors, setSubmitErrors ] = useState([]);
     const [ success, setSuccess ] = useState(false);
-    const [ redirect, setRedirect ] = useState(false);
     const [ error, setError ] = useState(false);
 
     const createProject = async (title, desc, shortDesc, username, pfp, github, allFeedback, allReviews, allThreads) => {
@@ -43,7 +42,6 @@ const Create = () => {
 
         setSuccess(false);
         setError(false);
-        setRedirect(false);
         let currSubmitErrors = [];
         setSubmitErrors([]);
 
@@ -72,7 +70,7 @@ const Create = () => {
                     if (response.status === 201) {
                         setSuccess(true);
                         setTimeout(() => {
-                            setRedirect(title.value);
+                            document.location.href = join(FRONTEND_PATH, `/project?name=${title.value}&user=${account.user_name}`);
                         }, 1 * 5000 + 200);
                     } else {
                         setError(response.message);
@@ -98,7 +96,6 @@ const Create = () => {
 
     return (
         <React.Fragment>
-            {redirect && <Redirect to={`/project?name=${redirect}`} />}
             {success && <Popup type="success" message="Successfully created project" />}
             {error && <Popup type="error" message={error} />}
             <Nav isLoggedIn={loggedIn} account={loggedIn ? account : null} />

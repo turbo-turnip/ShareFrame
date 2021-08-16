@@ -50,4 +50,16 @@ router.post('/createProject', async (req, res) => {
     } else res.status(400).json({ message: "Invalid Fields" });
 });
 
+router.post('/getProject', async (req, res) => {
+    const { user, name } = req.body;
+
+    if (validate([ user, name ])) {
+        const exists = await db.query("SELECT * FROM projects WHERE project_title = $1 AND user_name = $2", [ name, user ]);
+
+        if (exists.rows.length > 0) {
+            res.status(200).json({ project: exists.rows[0] });
+        } else res.status(404).json({ message: "Project not found" });
+    } else res.status(400).json({ message: "Invalid fields" });
+});
+
 module.exports = router;
