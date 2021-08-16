@@ -539,7 +539,6 @@ input[type=checkbox]:checked {
     justify-content: center;
     padding: 0 8%;
     position: relative;
-    overflow: hidden;
 }
 
 .project-page > .project-banner > *:not(img) {
@@ -552,4 +551,33 @@ input[type=checkbox]:checked {
     height: 100%;
     left: 0;
     z-index: 1;
+    border-radius: 12px 12px 0 0;
+}
+
+.project-banner .banner-views {
+    position: absolute;
+    bottom: 0;
+    transform: translateY(100%);
+    width: 100%;
+    left: 0;
+    background: var(--dark-2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-banner .banner-views > span {
+    flex: 1;
+    text-align: center;
+    font-size: 1.2em;
+    padding: .5em 0;
+    background: var(--dark-2);
+}
+
+.project-banner .banner-views > span:first-of-type {
+    border-radius: 0 0 0 12px;
+}
+
+.project-banner .banner-views > span:last-of-type {
+    border-radius: 0 0 12px 0;
 }

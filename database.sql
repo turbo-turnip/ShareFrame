@@ -34,5 +34,7 @@ CREATE TABLE projects (
     allow_threads VARCHAR(5) NOT NULL,
     threads JSON,
     feedback JSON,
-    reviews JSON
+    reviews JSON,
+    supporters JSON,
+    members JSON
 );

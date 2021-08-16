@@ -25,9 +25,9 @@ const Create = () => {
                     username: username,
                     pfp: pfp,
                     github,
-                    allFeedback: allFeedback.value,
-                    allReviews: allReviews.value,
-                    allThreads: allThreads.value
+                    allFeedback: allFeedback.checked ? 'TRUE' : 'FALSE',
+                    allReviews: allReviews.checked ? 'TRUE' : 'FALSE',
+                    allThreads: allThreads.checked ? 'TRUE' : 'FALSE'
                 })
             });
 

@@ -6,7 +6,6 @@ const router = new Router();
 
 router.post('/createProject', async (req, res) => {
     const { title, desc, shortDesc, username, pfp, github, allFeedback, allReviews, allThreads } = req.body;
-    const { repoRepo = "", repoUsername = "" } = github;
 
     if (validate([ title, desc, shortDesc, username, pfp, github.repo, github.username, allFeedback, allReviews, allThreads ])) {
         const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, username ]);
@@ -28,22 +27,26 @@ router.post('/createProject', async (req, res) => {
                 allow_threads,
                 feedback,
                 reviews,
-                threads
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`, [
+                threads,
+                supporters,
+                members
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`, [
                 title,
                 desc,
                 shortDesc,
-                (repoRepo == "" || repoUsername == "") ? 'FALSE' : 'TRUE',
+                (github.repoRepo == "" || github.repoUsername == "") ? 'FALSE' : 'TRUE',
                 username,
                 pfp,
-                repoUsername,
-                repoRepo,
+                github.repoUsername,
+                github.repoRepo,
                 allFeedback,
                 allReviews,
                 allThreads,
                 '[]',
                 '[]',
-                '[]'
+                '[]',
+                '[]',
+                `[{"user_name":"${username}","pfp":"${pfp}"}]`
             ]);
             res.status(201).json({ message: "Successfully created project" });
         }
