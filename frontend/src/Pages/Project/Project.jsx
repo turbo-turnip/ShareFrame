@@ -52,6 +52,23 @@ const Project = () => {
 
     useEffect(() => {
         if (project) {
+            if (localStorage.hasOwnProperty("at")) {
+                const at = localStorage.getItem("at");
+                fetch(join(BACKEND_PATH, "/auth/validateToken"), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: at
+                    })
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.account) {
+                            setOwner(res.account.user_pass === project.user_pass)
+                        }
+                    });
+            }
+
             let supporters = project.supporters.length,
                 members = project.members.length,
                 feedback = project.feedback.length,

@@ -30,7 +30,7 @@ And on ShareFrame, Supporters will be able to:
 __Version 1.0.0__ Working on project creation
 
 ## Bugs / Things to fix later
-- Create interface for password on verification page instead of popup
+- Create interface for password on verification page & create page instead of popup
 - Debug create page
 - Make a more user friendly interface for create page
 - Create page redesign 

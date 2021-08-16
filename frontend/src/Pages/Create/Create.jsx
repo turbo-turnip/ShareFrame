@@ -13,7 +13,7 @@ const Create = () => {
     const [ success, setSuccess ] = useState(false);
     const [ error, setError ] = useState(false);
 
-    const createProject = async (title, desc, shortDesc, username, pfp, github, allFeedback, allReviews, allThreads) => {
+    const createProject = async (title, desc, shortDesc, username, pfp, github, allFeedback, allReviews, allThreads, userPass) => {
         return new Promise(async (resolve) => {
             const request = await fetch(join(BACKEND_PATH, "/project/createProject"), {
                 method: 'POST',
@@ -27,7 +27,8 @@ const Create = () => {
                     github,
                     allFeedback: allFeedback.checked ? 'TRUE' : 'FALSE',
                     allReviews: allReviews.checked ? 'TRUE' : 'FALSE',
-                    allThreads: allThreads.checked ? 'TRUE' : 'FALSE'
+                    allThreads: allThreads.checked ? 'TRUE' : 'FALSE',
+                    password: userPass
                 })
             });
 
@@ -62,7 +63,9 @@ const Create = () => {
         }
 
         if (submitErrors.length === 0 && currSubmitErrors.length === 0) {
-            createProject(title, desc, shortDesc, account.user_name, account.pfp, github, allFeedback, allReviews, allThreads)
+            const userPass = prompt('Please enter your user password', '');
+
+            createProject(title, desc, shortDesc, account.user_name, account.pfp, github, allFeedback, allReviews, allThreads, userPass)
                 .then(response => {
 
                     console.log(response);

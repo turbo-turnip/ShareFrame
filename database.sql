@@ -36,5 +36,6 @@ CREATE TABLE projects (
     feedback JSON,
     reviews JSON,
     supporters JSON,
-    members JSON
+    members JSON,
+    user_pass TEXT
 );
