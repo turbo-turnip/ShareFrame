@@ -614,6 +614,11 @@ input[type=checkbox]:checked {
     padding: .8em .5em;
     background: var(--dark-1);
     transition: .2s;
+    cursor: pointer;
+}
+
+.project-bar > .option:hover {
+    background:rgba(43, 61, 82, 0.8);
 }
 
 .project-bar > .option:not(:first-child) {

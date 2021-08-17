@@ -16,6 +16,12 @@ const Project = () => {
     const [ error, setError ] = useState(false);
     const [ loading, setLoading ] = useState(true);
     const [ viewsCount, setViewsCount ] = useState({});
+    const [ currView, setCurrView ] = useState('Page');
+
+    const updateCurrViewHandler = (viewIndex) => {
+        setCurrView(viewIndex);
+        console.log(viewIndex);
+    }
 
     const fetchProject = async (user, name) => {
         const request = await fetch(join(BACKEND_PATH, "/project/getProject"), {
@@ -84,7 +90,7 @@ const Project = () => {
                     </React.Fragment>
                 }
             </div>
-            {!error && <ProjectBar project={project} owner={owner} />}
+            {!error && <ProjectBar updater={updateCurrViewHandler} currView={currView} project={project} owner={owner} />}
         </React.Fragment>
     );
 }
