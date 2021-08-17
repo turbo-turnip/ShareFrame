@@ -38,8 +38,9 @@ router.post('/createProject', async (req, res) => {
                     threads,
                     supporters,
                     members,
-                    user_pass
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`, [
+                    user_pass,
+                    announcements
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`, [
                     title,
                     desc,
                     shortDesc,
@@ -56,7 +57,8 @@ router.post('/createProject', async (req, res) => {
                     '[]',
                     '[]',
                     `[{"user_name":"${username}","pfp":"${pfp}"}]`,
-                    user.user_pass
+                    user.user_pass,
+                    '[]'
                 ]);
                 res.status(201).json({ message: "Successfully created project" });
             } else res.status(403).json({ message: "Invalid password" });

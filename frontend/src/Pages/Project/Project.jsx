@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
 import { BACKEND_PATH, join } from '../../PATH';
-import ProjectBanner from './ProjectBanner';
+import Page from './ProjectViews/Page';
 import ProjectBar from './ProjectBar';
 
 const url = new URL(window.location.href);
@@ -82,14 +82,16 @@ const Project = () => {
     return (
         <React.Fragment>
             <Nav isLoggedIn={loggedIn} account={account} />
-            <div className="project-page">
-                {error && <h1 className="url-error">{error}</h1>}
-                {!error && 
-                    <React.Fragment>
-                        <ProjectBanner viewsCount={viewsCount} loading={loading} setViewsCount={setViewsCount} project={project} />
-                    </React.Fragment>
-                }
-            </div>
+            {currView === "Page" &&
+                <Page 
+                    error={error} 
+                    viewsCount={viewsCount} 
+                    loading={loading} 
+                    setViewsCount={setViewsCount} 
+                    project={project}
+                    loggedIn={loggedIn}
+                    owner={owner} />
+            }
             {!error && <ProjectBar updater={updateCurrViewHandler} currView={currView} project={project} owner={owner} />}
         </React.Fragment>
     );
