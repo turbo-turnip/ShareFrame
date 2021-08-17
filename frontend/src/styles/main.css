@@ -748,3 +748,73 @@ input[type=checkbox]:checked {
 .project-pane .create:hover {
     opacity: 0.8;
 }
+
+.announcement-popup-new {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 450px;
+    min-height: 200px;
+    z-index: 10000000000000000000000000; /* just to make sure it is totally on top lol ;) */ 
+    background: var(--dark-3);
+    padding: 1em 1.3em;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1000000px #00000098;
+}
+
+.announcement-popup-new > h1 {
+    font-size: 1.7em;
+}
+
+.announcement-popup-new .input-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1em;
+}
+
+.announcement-popup-new .input-field label {
+    font-size: 1.2em;
+    margin-bottom: .2em;
+}
+
+.announcement-popup-new .input-field input {
+    width: 100%;
+}
+
+.announcement-popup-new .input-field select {
+    width: 100%;
+    background: var(--dark-1);
+    border: none;
+    font-size: 1.2em;
+    padding: .3em .6em;
+    border-radius: 6px;
+    padding-right: 1em;   
+}
+
+.announcement-popup-new > button[type=submit] {
+    font-size: 1.2em;
+    width: 100%;
+    margin-top: 30px;
+    background: var(--dark-1);
+    cursor: pointer;
+    padding: .5em 0;
+    border-radius: 20px;
+    border: none;
+}
+
+.announcement-popup-new > button[type=submit]:hover {
+    opacity: 0.8;
+}
+
+.announcement-popup-new > .x {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    font-size: 3em;
+    font-weight: lighter;
+    cursor: pointer;
+}

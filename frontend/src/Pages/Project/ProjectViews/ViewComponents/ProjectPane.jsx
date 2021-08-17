@@ -1,29 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import AnnouncementPopup from './AnnouncementPopup';
+import Announcement from './Announcement';
 
 const ProjectPane = ({ project, owner, loggedIn }) => {
+    const [ newProjectPopup, setNewProjectPopup ] = useState(false);
+
+    const announcementSubmitHandler = (e) => {
+        const [ version, title, type, announcement ] = e.target.parentElement.querySelectorAll("input, select");
+
+
+
+        e.target.remove();
+    }
+
     return (
         <div className="project-pane">
-            {loggedIn && <button className="create">Create Announcement</button>}
+            {newProjectPopup && 
+                <AnnouncementPopup 
+                    closeHandler={() => setNewProjectPopup(false)} 
+                    submitHandler={announcementSubmitHandler} />}
+            {(loggedIn && owner) && <button className="create" onClick={() => setNewProjectPopup(true)}>Create Announcement</button>}
             {project ? (project.announcements.length < 1) ?
                 <h3>This is where project announcements will appear!</h3>
                 :
                 project.announcements.map(announcement => 
-                    <div className="project-announcement" data-date-created={project.date_created}>
-                            <img src={announcement.pfp} alt={announcement.user_name} />
-                            <div className="info">
-                                <span className="version"><b>{announcement.version}</b></span>
-                                <span>{announcement.title}</span>
-                                <span className="announcement-type">{announcement.type}</span>
-                            </div>
-                            <h4>{announcement.desc}</h4>
-                            {loggedIn && 
-                                <div className="buttons">
-                                    {project.allow_threads === 'TRUE' && <button>Create Thread</button>}
-                                    {loggedIn && <button>Report Bug</button>}
-                                    {loggedIn && <button>Comment</button>}
-                                    {owner && <button>Delete</button>}
-                                </div>}
-                    </div>) : <h1>Invalid project</h1>
+                    <Announcement 
+                        announcement={announcement} 
+                        project={project} 
+                        owner={owner} 
+                        loggedIn={loggedIn} />
+                    ) : <h1>Invalid project</h1>
             }
         </div>
     );
