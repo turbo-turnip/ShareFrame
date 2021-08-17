@@ -3,6 +3,7 @@ import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
 import { BACKEND_PATH, join } from '../../PATH';
 import ProjectBanner from './ProjectBanner';
+import ProjectBar from './ProjectBar';
 
 const url = new URL(window.location.href);
 const searchParams = new URLSearchParams(url.search);
@@ -78,9 +79,12 @@ const Project = () => {
             <div className="project-page">
                 {error && <h1 className="url-error">{error}</h1>}
                 {!error && 
-                    <ProjectBanner viewsCount={viewsCount} loading={loading} setViewsCount={setViewsCount} project={project} />
+                    <React.Fragment>
+                        <ProjectBanner viewsCount={viewsCount} loading={loading} setViewsCount={setViewsCount} project={project} />
+                    </React.Fragment>
                 }
             </div>
+            {!error && <ProjectBar project={project} owner={owner} />}
         </React.Fragment>
     );
 }

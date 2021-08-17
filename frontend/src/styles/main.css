@@ -593,3 +593,63 @@ input[type=checkbox]:checked {
     place-items: center;
     font-weight: 400;
 }
+
+.project-bar {
+    width: 100vw;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.project-bar > .option {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    padding: .8em .5em;
+    background: var(--dark-1);
+    transition: .2s;
+}
+
+.project-bar > .option:not(:first-child) {
+    border-left: 1px solid var(--dark-3);
+}
+
+.project-bar > .option.curr {
+    border-bottom: 5px solid var(--light-blue);
+}
+
+.project-bar > .option a {
+    text-decoration: none;
+}
+
+.navigate {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    background: var(--light-blue);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px 2px #0003;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navigate > svg {
+    width: 70%;
+    height: 70%;
+}
+
+.navigate-left {
+    left: 10px;
+}
+
+.navigate-right {
+    right: 10px;
+}
