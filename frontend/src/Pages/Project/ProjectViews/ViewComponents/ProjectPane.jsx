@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AnnouncementPopup from './AnnouncementPopup';
 import Announcement from './Announcement';
 import { BACKEND_PATH, join } from '../../../../PATH';
+import Popup from '../../../../Components/Popup';
 
 const ProjectPane = ({ project, owner, loggedIn, account }) => {
     const [ newProjectPopup, setNewProjectPopup ] = useState(false);
+    const [ errorPopup, setErrorPopup ] = useState(false);
+    const [ successPopup, setSuccessPopup ] = useState(false);
 
     const announcementSubmitHandler = async (e) => {
         const [ version, title, type, announcement ] = e.target.parentElement.querySelectorAll("input, select");
@@ -26,13 +29,28 @@ const ProjectPane = ({ project, owner, loggedIn, account }) => {
 
         const response = await request.json();
 
-        console.log(response);
+        if (request.status !== 201) {
+            setErrorPopup(response.message);
+            setTimeout(() => {
+                setErrorPopup(false);
+                document.location.reload();
+            }, 5000 * 1 + 200)
+        }
+        else {
+            setSuccessPopup(response.message);
+            setTimeout(() => {
+                setSuccessPopup(false);
+                document.location.reload();
+            }, 5000 * 1 + 200)
+        }
 
         e.target.remove();
     }
 
     return (
         <div className="project-pane">
+            {successPopup && <Popup type="success" message={successPopup} />}
+            {errorPopup && <Popup type="error" message={errorPopup} />}
             {newProjectPopup && 
                 <AnnouncementPopup 
                     closeHandler={() => setNewProjectPopup(false)} 
@@ -41,8 +59,9 @@ const ProjectPane = ({ project, owner, loggedIn, account }) => {
             {project ? (project.announcements.length < 1) ?
                 <h3>This is where project announcements will appear!</h3>
                 :
-                project.announcements.map(announcement => 
+                project.announcements.reverse().map((announcement, i) => 
                     <Announcement 
+                        key={i}
                         announcement={announcement} 
                         project={project} 
                         owner={owner} 

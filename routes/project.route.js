@@ -99,7 +99,7 @@ router.post('/createAnnouncement', async (req, res) => {
             const validVersion = /([0-9])*\.([0-9])*(\.([0-9])*)?/gmi.test(version);
 
             if (validVersion) {
-                object.announcements.push({
+                object.announcements.unshift({
                     pfp, user_name: user, version, title, type, desc: content, allow_threads: allowThreads
                 });
 
