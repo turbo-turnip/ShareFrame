@@ -1,4 +1,5 @@
 const Router = require('express').Router;
+// validateInputs just sanitizes an array of strings and returns false if SQLi or XSS is detected
 const { validateInputs: validate, pool: db } = require('../database');
 const bcrypt = require('bcryptjs');
 
@@ -76,6 +77,40 @@ router.post('/getProject', async (req, res) => {
             res.status(200).json({ project: exists.rows[0] });
         } else res.status(404).json({ message: "Project not found" });
     } else res.status(400).json({ message: "Invalid fields" });
+});
+
+router.post('/createAnnouncement', async (req, res) => {
+    const { user, name, version, type, title, content, pfp, allowThreads } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1', [ name ]);
+    let object = {};
+
+    if (exists.rows.length > 0) {
+        exists.rows.forEach(project => {
+            let found = false;
+            project.members.forEach(member => member.user_name === user && member.pfp === pfp ? found = true : null);
+            if (found) 
+                object = project;
+        });
+
+        if (object === {})
+            res.status(404).json({ message: "Project not found" });
+        else {
+            const validVersion = /([0-9])*\.([0-9])*(\.([0-9])*)?/gmi.test(version);
+
+            if (validVersion) {
+                object.announcements.push({
+                    pfp, user_name: user, version, title, type, desc: content, allow_threads: allowThreads
+                });
+
+                await db.query(`UPDATE projects SET announcements = '${JSON.stringify(object.announcements)}' WHERE project_title = $1 AND user_name = $2`, [
+                    object.project_title, object.user_name
+                ]);
+
+                res.status(201).json({ message: "Successfully created announcement" });
+            } else res.status(406).json({ message: "Invalid version number" });
+        }
+    } else res.status(404).json({ message: "Project not found" });
 });
 
 module.exports = router;

@@ -82,7 +82,7 @@ const Project = () => {
     return (
         <React.Fragment>
             <Nav isLoggedIn={loggedIn} account={account} />
-            {currView === "Page" &&
+            {account ? currView === "Page" &&
                 <Page 
                     error={error} 
                     viewsCount={viewsCount} 
@@ -90,8 +90,9 @@ const Project = () => {
                     setViewsCount={setViewsCount} 
                     project={project}
                     loggedIn={loggedIn}
-                    owner={owner} />
-            }
+                    owner={owner}
+                    account={account} />
+            : ""}
             {!error && <ProjectBar updater={updateCurrViewHandler} currView={currView} project={project} owner={owner} />}
         </React.Fragment>
     );

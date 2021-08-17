@@ -28,8 +28,6 @@ const validateInputs = ([...inputs] = []) => {
         (a.test(input) || b.test(input) || c.test(input) || d.test(input) || e.test(input)) && true
     );
 
-    console.log(inputsFiltered);
-
     return !(inputsFiltered.length > 0);
 };
 

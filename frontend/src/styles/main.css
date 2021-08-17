@@ -596,7 +596,7 @@ input[type=checkbox]:checked {
 
 .project-bar {
     width: 100vw;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     display: flex;
@@ -667,6 +667,7 @@ input[type=checkbox]:checked {
     padding: 1em 1.5em;
     min-height: 200px;
     position: relative;
+    margin-bottom: 100px;
 }
 
 .project-page .project-pane > h3 {
@@ -706,7 +707,6 @@ input[type=checkbox]:checked {
 }
 
 .project-announcement .announcement-type {
-    background: var(--light-blue);
     color: var(--dark-3);
     padding: .15em .5em;
     border-radius: 20px;
