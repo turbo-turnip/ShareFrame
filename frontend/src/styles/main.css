@@ -893,6 +893,10 @@ input[type=checkbox]:checked {
     margin: .1em 0;
 }
 
+.announcement-comment .vote > .vote-count {
+    font-size: 0.8em;
+}
+
 .upvote {
     clip-path: polygon(
         50% 0%,

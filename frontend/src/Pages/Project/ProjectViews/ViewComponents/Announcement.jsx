@@ -137,11 +137,16 @@ const Announcement = ({ announcement, loggedIn, owner, project, username, pfp })
                         {newComment && 
                             <div className="new-announcement-comment">
                                 <h4>New Comment</h4>    
-                                <textarea maxLength="100" placeholder="e.g. Great announcement! Keep up the good work!"></textarea>
+                                <textarea maxLength="400" placeholder="e.g. Great announcement! Keep up the good work!"></textarea>
                                 <button onClick={(e) => createCommentHandler(e)}>Comment</button>
                             </div>}
                         {announcement.comments && announcement.comments.map(comment => 
-                            <Comment comment={comment} />)}
+                            <Comment 
+                                comment={comment}
+                                user={username}
+                                pfp={pfp}
+                                announcement={announcement}
+                                project={project} />)}
                         {announcement ? (!announcement.comments || announcement.comments.length === 0) && <h4>No comments yet!</h4> : ""}
                     </details> : <h4>Loading...</h4>}
         </div>

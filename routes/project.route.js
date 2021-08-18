@@ -194,4 +194,120 @@ router.post('/createComment', async (req, res) => {
     } else res.status(403).json({ message: "Invalid user" });
 });
 
+router.post('/upvoteComment', async (req, res) => {
+    const { comment, commentCreator, user, pfp, commentUserPfp, announcementName, title, projectCreator, announcementContent } = req.body;
+
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ user, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, projectCreator ]);
+
+        if (exists.rows.length > 0) {
+            const project = exists.rows[0];
+
+            let announcementIndex = -1;
+            project.announcements.forEach((announcement, i) => {
+                if (announcement.title === announcementName && announcement.desc === announcementContent) {
+                    announcementIndex = i;
+                }
+            });
+
+            if (announcementIndex > -1) {
+                let commentIndex = -1;
+                project.announcements[announcementIndex].comments.forEach((userComment, i) => {
+                    if (userComment.comment === comment && userComment.user === commentCreator && userComment.pfp === commentUserPfp) {
+                        commentIndex = i;
+                    }
+                });
+
+                if (commentIndex > -1) {
+                    if (!project.announcements[announcementIndex].comments[commentIndex].upvotes) {
+                        project.announcements[announcementIndex].comments[commentIndex].upvotes = [ { user, pfp } ];
+
+                        await db.query(`UPDATE projects SET announcements = '${JSON.stringify(project.announcements)}' WHERE project_title = $1 AND user_name = $2`, [ title, projectCreator ]);
+
+                        res.status(200).json({ message: "Success", upvotes: project.announcements[announcementIndex].comments[commentIndex].upvotes, status: "UPVOTED" });
+                    } else {
+                        let alreadyUpvoted = -1;
+                        project.announcements[announcementIndex].comments[commentIndex].upvotes.forEach((vote, i) => 
+                            vote.user === user && vote.pfp === pfp ? alreadyUpvoted = i : null);
+
+                        let status = 0;
+
+                        if (alreadyUpvoted < 0) {
+                            project.announcements[announcementIndex].comments[commentIndex].upvotes.push({ user, pfp });
+                            status = "UPVOTED";
+                        } else {
+                            project.announcements[announcementIndex].comments[commentIndex].upvotes.splice(alreadyUpvoted, 1);
+                            status = "REMOVED";
+                        }
+
+                        await db.query(`UPDATE projects SET announcements = '${JSON.stringify(project.announcements)}' WHERE project_title = $1 AND user_name = $2`, [ title, projectCreator ]);
+
+                        res.status(200).json({ message: "Success", upvotes: project.announcements[announcementIndex].comments[commentIndex].upvotes, status });
+                    }
+                } else res.status(404).json({ message: "Comment not found" });
+            } else res.status(404).json({ message: "Announcement not found" });
+        } else res.status(404).json({ message: "Project not found" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
+router.post('/downvoteComment', async (req, res) => {
+    const { comment, commentCreator, user, pfp, commentUserPfp, announcementName, title, projectCreator, announcementContent } = req.body;
+
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ user, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, projectCreator ]);
+
+        if (exists.rows.length > 0) {
+            const project = exists.rows[0];
+
+            let announcementIndex = -1;
+            project.announcements.forEach((announcement, i) => {
+                if (announcement.title === announcementName && announcement.desc === announcementContent) {
+                    announcementIndex = i;
+                }
+            });
+
+            if (announcementIndex > -1) {
+                let commentIndex = -1;
+                project.announcements[announcementIndex].comments.forEach((userComment, i) => {
+                    if (userComment.comment === comment && userComment.user === commentCreator && userComment.pfp === commentUserPfp) {
+                        commentIndex = i;
+                    }
+                });
+
+                if (commentIndex > -1) {
+                    if (!project.announcements[announcementIndex].comments[commentIndex].downvotes) {
+                        project.announcements[announcementIndex].comments[commentIndex].downvotes = [ { user, pfp } ];
+
+                        await db.query(`UPDATE projects SET announcements = '${JSON.stringify(project.announcements)}' WHERE project_title = $1 AND user_name = $2`, [ title, projectCreator ]);
+
+                        res.status(200).json({ message: "Success", downvotes: project.announcements[announcementIndex].comments[commentIndex].downvotes, status: "DOWNVOTED" });
+                    } else {
+                        let alreadyDownvoted = -1;
+                        project.announcements[announcementIndex].comments[commentIndex].downvotes.forEach((vote, i) => 
+                            vote.user === user && vote.pfp === pfp ? alreadyDownvoted = i : null);
+
+                        let status = 0;
+
+                        if (alreadyDownvoted < 0) {
+                            project.announcements[announcementIndex].comments[commentIndex].downvotes.push({ user, pfp });
+                            status = "DOWNVOTED";
+                        } else {
+                            project.announcements[announcementIndex].comments[commentIndex].downvotes.splice(alreadyDownvoted, 1);
+                            status = "REMOVED";
+                        }
+
+                        await db.query(`UPDATE projects SET announcements = '${JSON.stringify(project.announcements)}' WHERE project_title = $1 AND user_name = $2`, [ title, projectCreator ]);
+
+                        res.status(200).json({ message: "Success", downvotes: project.announcements[announcementIndex].comments[commentIndex].downvotes, status });
+                    }
+                } else res.status(404).json({ message: "Comment not found" });
+            } else res.status(404).json({ message: "Announcement not found" });
+        } else res.status(404).json({ message: "Project not found" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
 module.exports = router;
