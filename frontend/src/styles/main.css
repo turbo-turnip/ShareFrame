@@ -753,7 +753,11 @@ input[type=checkbox]:checked {
     opacity: 0.8;
 }
 
-.announcement-popup-new {
+.project-pane details {
+    margin-top: .7em;
+}
+
+.popup-new {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -769,27 +773,27 @@ input[type=checkbox]:checked {
     box-shadow: 0 0 0 1000000px #00000098;
 }
 
-.announcement-popup-new > h1 {
+.popup-new > h1 {
     font-size: 1.7em;
 }
 
-.announcement-popup-new .input-field {
+.popup-new .input-field {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1em;
 }
 
-.announcement-popup-new .input-field label {
+.popup-new .input-field label {
     font-size: 1.2em;
     margin-bottom: .2em;
 }
 
-.announcement-popup-new .input-field input {
+.popup-new .input-field input {
     width: 100%;
 }
 
-.announcement-popup-new .input-field select {
+.popup-new .input-field select {
     width: 100%;
     background: var(--dark-1);
     border: none;
@@ -799,7 +803,7 @@ input[type=checkbox]:checked {
     padding-right: 1em;   
 }
 
-.announcement-popup-new > button[type=submit] {
+.popup-new > button[type=submit] {
     font-size: 1.2em;
     width: 100%;
     margin-top: 30px;
@@ -810,11 +814,11 @@ input[type=checkbox]:checked {
     border: none;
 }
 
-.announcement-popup-new > button[type=submit]:hover {
+.popup-new > button[type=submit]:hover {
     opacity: 0.8;
 }
 
-.announcement-popup-new > .x {
+.popup-new > .x {
     position: absolute;
     top: 0;
     left: 20px;
@@ -915,4 +919,79 @@ input[type=checkbox]:checked {
 
 .announcement-comment .vote > *:not(.vote-count):hover {
     opacity: 0.5;
+}
+
+.project-feedback {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.project-feedback .url-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80vw;
+}
+
+.project-feedback .filter-feedback {
+    width: 100%;
+    display: flex;
+    min-height: 40px;
+}
+
+.project-feedback .filter-feedback input {
+    flex: 1;
+    border-radius: 6px 0 0 6px;
+}
+
+.project-feedback .filter-feedback button {
+    background: var(--dark-2);
+    font-size: 1.2em;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    padding: 0 1em;
+    cursor: pointer;
+}
+
+.project-feedback .filter-feedback button:hover {
+    opacity: 0.8;
+}
+
+.project-feedback > button {
+    font-size: 1.3em;
+    background: var(--dark-2);
+    border: none;
+    padding: .3em .8em;
+    border-radius: 6px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: .5em 0;
+    cursor: pointer;
+}
+
+.project-feedback > button:hover {
+    opacity: 0.8;
+}
+
+.feedback-entry {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    background: var(--dark-2);
+    position: relative;
+    margin: 1.5em 0;
+    padding: .5em .6em;
+    border-radius: 6px;
+    padding-right: 30px;
+}
+
+.feedback-entry > img {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    left: -15px;
+    top: -15px;
 }

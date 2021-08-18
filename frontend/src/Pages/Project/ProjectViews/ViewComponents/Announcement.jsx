@@ -146,7 +146,8 @@ const Announcement = ({ announcement, loggedIn, owner, project, username, pfp })
                                 user={username}
                                 pfp={pfp}
                                 announcement={announcement}
-                                project={project} />)}
+                                project={project}
+                                loggedIn={loggedIn} />)}
                         {announcement ? (!announcement.comments || announcement.comments.length === 0) && <h4>No comments yet!</h4> : ""}
                     </details> : <h4>Loading...</h4>}
         </div>

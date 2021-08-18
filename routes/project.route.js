@@ -310,4 +310,38 @@ router.post('/downvoteComment', async (req, res) => {
     } else res.status(403).json({ message: "Invalid user" });
 });
 
+router.post('/createFeedback', async (req, res) => {
+    const { user, pfp, title, projectCreator, password, feedbackTitle, feedback } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, projectCreator ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ user, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        const passwordCorrect = await bcrypt.compare(password, userExists.rows[0].user_pass);
+
+        if (passwordCorrect) {
+            if (exists.rows.length > 0) {
+                const userFeedback = {
+                    title: feedbackTitle,
+                    feedback,
+                    user,
+                    pfp
+                };
+
+                const project = exists.rows[0];
+
+                if (!project.feedback) {
+                    project.feedback = [ userFeedback ];
+                } else {
+                    project.feedback.unshift(userFeedback);
+                }
+
+                const newFeedback = await db.query(`UPDATE projects SET feedback = '${JSON.stringify(project.feedback)}' WHERE project_title = $1 AND user_name = $2 RETURNING feedback`, [ title, projectCreator ]);
+
+                res.status(201).json({ message: "Successfully created feedback", feedback: newFeedback.rows[0].feedback });
+            } else res.status(404).json({ message: "Project not found" });
+        } else res.status(403).json({ message: "Invalid password" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
 module.exports = router;

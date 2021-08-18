@@ -3,6 +3,7 @@ import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
 import { BACKEND_PATH, join } from '../../PATH';
 import Page from './ProjectViews/Page';
+import Feedback from './ProjectViews/Feedback';
 import ProjectBar from './ProjectBar';
 
 const url = new URL(window.location.href);
@@ -88,6 +89,14 @@ const Project = () => {
                     viewsCount={viewsCount} 
                     loading={loading} 
                     setViewsCount={setViewsCount} 
+                    project={project}
+                    loggedIn={loggedIn}
+                    owner={owner}
+                    account={account} />
+            : ""}
+            {account ? currView === "Feedback" &&
+                <Feedback 
+                    error={error} 
                     project={project}
                     loggedIn={loggedIn}
                     owner={owner}

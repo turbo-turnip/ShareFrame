@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BACKEND_PATH, join } from '../../../../PATH';
 
-const Comment = ({ comment, user, pfp, announcement, project }) => {
+const Comment = ({ comment, user, pfp, announcement, project, loggedIn }) => {
     const [ upvotes, setUpvotes ] = useState(comment && comment.upvotes && (comment.upvotes.length ? comment.upvotes.length : 0));
     const [ downvotes, setDownvotes ] = useState(comment && comment.downvotes && (comment.downvotes.length ? comment.downvotes.length : 0));
 
@@ -81,11 +81,12 @@ const Comment = ({ comment, user, pfp, announcement, project }) => {
                     <img src={comment.pfp} alt={comment.user} />
                     <span>{comment.user}</span>
                     <p>{comment.comment}</p>
-                    <div className="vote">
-                        <div className="upvote" onClick={upvoteHandler}></div>
-                        <div className="vote-count">{(upvotes ? upvotes : 0) - (downvotes ? downvotes : 0)}</div>
-                        <div className="downvote" onClick={downvoteHandler}></div>
-                    </div>
+                    {loggedIn &&
+                        <div className="vote">
+                            <div className="upvote" onClick={upvoteHandler}></div>
+                            <div className="vote-count">{(upvotes ? upvotes : 0) - (downvotes ? downvotes : 0)}</div>
+                            <div className="downvote" onClick={downvoteHandler}></div>
+                        </div>}
                 </div>}
         </React.Fragment>
     );
