@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AnnouncementPopup from './AnnouncementPopup';
 import Announcement from './Announcement';
 import { BACKEND_PATH, join } from '../../../../PATH';
@@ -66,7 +66,8 @@ const ProjectPane = ({ project, owner, loggedIn, account }) => {
                         project={project} 
                         owner={owner} 
                         loggedIn={loggedIn}
-                        username={account.user_name} />
+                        username={account.user_name}
+                        pfp={account.pfp} />
                     ) : <h1>Invalid project</h1>
             }
         </div>

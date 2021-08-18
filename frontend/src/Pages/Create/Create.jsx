@@ -3,7 +3,6 @@ import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
 import { FRONTEND_PATH, BACKEND_PATH, join } from '../../PATH';
 import Popup from '../../Components/Popup';
-import { Redirect } from 'react-router-dom';
 
 const Create = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);

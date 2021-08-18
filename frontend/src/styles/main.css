@@ -581,7 +581,7 @@ input[type=checkbox]:checked {
     border-left: 1px solid var(--dark-3);
 }
 
-.project-banner .banner-views > span > h4.count {
+.count {
     background: var(--dark-1);
     width: max-content;
     min-width: 30px;
@@ -592,6 +592,10 @@ input[type=checkbox]:checked {
     display: grid;
     place-items: center;
     font-weight: 400;
+}
+
+.count.count-dark-3 {
+    background: var(--dark-3);
 }
 
 .project-bar {
@@ -817,4 +821,94 @@ input[type=checkbox]:checked {
     font-size: 3em;
     font-weight: lighter;
     cursor: pointer;
+}
+
+.new-announcement-comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--dark-2);
+    padding: .5em .8em;
+    border-radius: 6px;
+    margin: .8em 0;
+}
+
+.new-announcement-comment h4 {
+    font-size: 1.2em;
+    margin-bottom: .5em;
+    font-weight: normal;
+}
+
+.new-announcement-comment > textarea {
+    min-width: 200px;
+    min-height: 100px;
+    width: 280px;
+    font-size: 1.1em;
+    border-radius: 6px;
+    padding: .2em .5em;
+    color: #000;
+}
+
+.new-announcement-comment > button {
+    background: var(--dark-1);
+    cursor: pointer;
+    margin-top: .4em;
+    font-size: 1.3em;
+}
+
+.announcement-comment {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    background: var(--dark-2);
+    position: relative;
+    margin: 1em 0;
+    padding: .5em .6em;
+    border-radius: 6px;
+    padding-right: 30px;
+}
+
+.announcement-comment > img {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: -10px;
+    top: -10px;
+}
+
+.announcement-comment .vote {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+}
+
+.announcement-comment .vote > *:not(.vote-count) {
+    width: 20px;
+    height: 10px;
+    cursor: pointer;
+    position: relative;
+    background: var(--light-blue);
+    margin: .1em 0;
+}
+
+.upvote {
+    clip-path: polygon(
+        50% 0%,
+        100% 100%,
+        0% 100%
+    );
+}
+
+.downvote {
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        50% 100%
+    );
+}
+
+.announcement-comment .vote > *:not(.vote-count):hover {
+    opacity: 0.5;
 }

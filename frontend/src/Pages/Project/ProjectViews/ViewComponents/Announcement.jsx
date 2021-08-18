@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Popup from '../../../../Components/Popup';
 import { BACKEND_PATH, join } from '../../../../PATH';
+import Comment from './Comment';
 
 const types = [
     { name: "Commit", color: "#f0ed35" },    
@@ -16,10 +17,12 @@ const types = [
     { name: "Announcement", color: "#033d70" }
 ];
 
-const Announcement = ({ announcement, loggedIn, owner, project, username }) => {
+const Announcement = ({ announcement, loggedIn, owner, project, username, pfp }) => {
+    const commentsRef = useRef();
     const [ typeColor, setTypeColor ] = useState();
     const [ successPopup, setSuccessPopup ] = useState(false);
     const [ errorPopup, setErrorPopup ] = useState(false);
+    const [ newComment, setNewComment ] = useState(false);
 
     const deleteHandler = async () => {
         if (window.confirm("Are you sure you want delete the announcement " + announcement.title + "?")) {
@@ -54,8 +57,41 @@ const Announcement = ({ announcement, loggedIn, owner, project, username }) => {
                     document.location.reload();
                 }, 5000 * 1 + 200);
             }
+        }
+    }
 
-            console.log(response);
+    const createCommentHandler = async (e) => {
+        const input = e.target.previousSibling.value;
+
+        const request = await fetch(join(BACKEND_PATH, "/project/createComment"), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                comment: input,
+                user: username,
+                pfp,
+                announcementName: announcement.title,
+                title: project.project_title,
+                projectCreator: project.user_name,
+                announcementContent: announcement.desc
+            })
+        });
+
+        const response = await request.json();
+
+        if (request.status !== 201) {
+            setErrorPopup(response.message);
+            setTimeout(() => {
+                setErrorPopup(false);
+                document.location.reload();
+            }, 5000 * 1 + 200);
+        }
+        else {
+            setSuccessPopup(response.message);
+            setTimeout(() => {
+                setSuccessPopup(false);
+                document.location.reload();
+            }, 5000 * 1 + 200);
         }
     }
 
@@ -66,7 +102,7 @@ const Announcement = ({ announcement, loggedIn, owner, project, username }) => {
                 return;
             }
         });
-    }, []);
+    }, [ announcement.type ]);
 
     return (
         <div className="project-announcement">
@@ -83,9 +119,31 @@ const Announcement = ({ announcement, loggedIn, owner, project, username }) => {
                 <div className="buttons">
                     {project.allow_threads === 'TRUE' && <button>Create Thread</button>}
                     {loggedIn && <button>Report Bug</button>}
-                    {loggedIn && <button>Comment</button>}
+                    {loggedIn && <button onClick={() => {
+                        setNewComment(true);
+
+                        const droppedDown = commentsRef.current.getAttribute('open') === "";
+                
+                        if (!droppedDown)
+                            commentsRef.current.setAttribute('open', "");
+                    }}>Comment</button>}
                     {owner && <button onClick={deleteHandler}>Delete</button>}
                 </div>}
+            {announcement ? 
+                    <details ref={commentsRef}>
+                        <summary>
+                            Comments ({announcement.comments ? announcement.comments.length : 0})
+                        </summary>
+                        {newComment && 
+                            <div className="new-announcement-comment">
+                                <h4>New Comment</h4>    
+                                <textarea maxLength="100" placeholder="e.g. Great announcement! Keep up the good work!"></textarea>
+                                <button onClick={(e) => createCommentHandler(e)}>Comment</button>
+                            </div>}
+                        {announcement.comments && announcement.comments.map(comment => 
+                            <Comment comment={comment} />)}
+                        {announcement ? (!announcement.comments || announcement.comments.length === 0) && <h4>No comments yet!</h4> : ""}
+                    </details> : <h4>Loading...</h4>}
         </div>
     );
 }

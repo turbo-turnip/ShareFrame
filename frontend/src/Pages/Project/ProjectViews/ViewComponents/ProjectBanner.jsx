@@ -15,6 +15,7 @@ const ProjectBanner = ({ viewsCount, loading, setViewsCount, project }) => {
                     setViewsCount({ supporters, members, feedback, threads, reviews, commits: res.length });
                 });
         }
+    // eslint-disable-next-line
     }, [ project ]);
 
     return (

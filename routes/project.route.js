@@ -156,4 +156,42 @@ router.post('/deleteAnnouncement', async (req, res) => {
     } else res.status(403).json({ message: "Invalid user" });
 });
 
+router.post('/createComment', async (req, res) => {
+    const { comment, user, pfp, announcementName, title, projectCreator, announcementContent } = req.body;
+
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ user, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, projectCreator ]);
+
+        if (exists.rows.length > 0) {
+            const project = exists.rows[0];
+
+            let index = -1;
+            project.announcements.forEach((announcement, i) => {
+                if (announcement.title === announcementName && announcement.desc === announcementContent) {
+                    index = i;
+                }
+            });
+
+            if (index > -1) {
+                if (comment !== "") {
+                    const newComment = {
+                        comment, user, pfp
+                    };
+
+                    if (!project.announcements[index].comments)
+                        project.announcements[index].comments = [ newComment ];
+                    else 
+                        project.announcements[index].comments.unshift(newComment);
+
+                    await db.query(`UPDATE projects SET announcements = '${JSON.stringify(project.announcements)}' WHERE project_title = $1 AND user_name = $2`, [ title, projectCreator ]);
+
+                    res.status(201).json({ message: "Successfully created comment" });
+                } else res.status(406).json({ message: "Comment must have content" });
+            } else res.status(404).json({ message: "Announcement not found" });
+        } else res.status(404).json({ message: "Project not found" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
 module.exports = router;

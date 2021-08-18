@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 
 const ProjectBar = ({ updater, currView, project, owner }) => {
     const [ scrollLeft, setScrollLeft ] = useState(0);
