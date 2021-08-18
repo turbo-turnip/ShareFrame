@@ -113,4 +113,47 @@ router.post('/createAnnouncement', async (req, res) => {
     } else res.status(404).json({ message: "Project not found" });
 });
 
+router.post('/deleteAnnouncement', async (req, res) => {
+    const { user, announcementName, title, projectCreator, announcementContent, password } = req.body;
+
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1', [ user ]);
+
+    if (userExists.rows.length > 0) {
+        const validPass = await bcrypt.compare(password, userExists.rows[0].user_pass);
+
+        if (validPass) {
+            const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, projectCreator ]);
+            let object = {};
+
+            if (exists.rows.length > 0) {
+                exists.rows.forEach(project => {
+                    let found = false;
+                    project.members.forEach(member => member.user_name === user ? found = true : null);
+                    if (found) 
+                        object = project;
+                });
+
+                if (object === {})
+                    res.status(404).json({ message: "Project not found" });
+                else {
+                    let index = -1;
+                    object.announcements.forEach((announcement, i) => {
+                        if (announcement.title === announcementName && announcement.desc === announcementContent) {
+                            index = i;
+                        }
+                    });
+
+                    if (index > -1) {
+                        object.announcements.splice(index, 1);
+
+                        await db.query('UPDATE projects SET announcements = $1 WHERE project_title = $2 AND user_name = $3', [ JSON.stringify(object.announcements), title, projectCreator ]);
+
+                        res.status(200).json({ message: "Successfully deleted announcement" });
+                    } else res.status(404).json({ message: "Announcement not found" });
+                }
+            } else res.status(404).json({ message: "Project not found" });
+        } else res.status(403).json({ message: "Invalid password" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
 module.exports = router;

@@ -65,7 +65,8 @@ const ProjectPane = ({ project, owner, loggedIn, account }) => {
                         announcement={announcement} 
                         project={project} 
                         owner={owner} 
-                        loggedIn={loggedIn} />
+                        loggedIn={loggedIn}
+                        username={account.user_name} />
                     ) : <h1>Invalid project</h1>
             }
         </div>
