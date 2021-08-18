@@ -6,9 +6,11 @@ import Popup from '../../../Components/Popup';
 
 const Feedback = ({ error, project, owner, loggedIn, account }) => {
     const [ feedback, setFeedback ] = useState(project && project.feedback ? project.feedback : []);
+    const [ feeedbackToShow, setFeedbackToShow ] = useState(feedback);
     const [ newFeedbackPopup, setNewFeedbackPopup ] = useState(false);
     const [ successPopup, setSuccessPopup ] = useState(false);
     const [ errorPopup, setErrorPopup ] = useState(false);
+    const [ searchInput, setSearchInput ] = useState("");
 
     const newFeedbackHandler = async (e) => {
         const [ title, feedback ] = e.target.querySelectorAll("input");
@@ -47,6 +49,31 @@ const Feedback = ({ error, project, owner, loggedIn, account }) => {
         }
     }
 
+    useEffect(() => setFeedbackToShow(feedback), [ feedback ]);
+
+    useEffect(() => {
+        if (searchInput !== "") {
+            const accuracy = searchInput.length / 5 * 3;
+            let matches = [];
+            
+            feedback.forEach(entry => {
+                let matched = 0;
+                
+                Array.from(searchInput).forEach(char => {
+                    if (entry.title.includes(char.toUpperCase()) || entry.title.includes(char.toLowerCase()))
+                        matched++;
+                    else if (entry.feedback.includes(char.toUpperCase()) || entry.feedback.includes(char.toLowerCase()))
+                        matched += 2;
+                });
+
+                if (matched >= Math.ceil(accuracy))
+                    matches.push({ ...entry, hierarchy: matched });
+            });
+
+            setFeedbackToShow(matches.sort((a, b) => b.hierarchy - a.hierarchy));
+        }
+    }, [ searchInput ]);
+
     return (
         <div className="project-feedback">
             {successPopup && <Popup type="success" message={successPopup} />}
@@ -57,9 +84,9 @@ const Feedback = ({ error, project, owner, loggedIn, account }) => {
                 <React.Fragment>
                     <div className="filter-feedback">
                         <input type="text" placeholder="Search feedback..." />
-                        <button>Search</button>
+                        <button onClick={(e) => setSearchInput(e.target.previousSibling.value)}>Search</button>
                     </div>
-                    {feedback.map(entry => 
+                    {feeedbackToShow.map(entry => 
                         <FeedbackEntry entry={entry} />)}
                     {(loggedIn && !owner) && <button onClick={() => setNewFeedbackPopup(true)}>Add Feedback</button>}
                 </React.Fragment>    
