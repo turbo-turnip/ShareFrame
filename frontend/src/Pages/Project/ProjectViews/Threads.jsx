@@ -61,7 +61,7 @@ const Threads = ({ error, project, owner, loggedIn, account }) => {
                     <h1>Threads{loggedIn && <button onClick={() => setNewThreadPopup(true)}>Create New</button>}</h1>
                     {threads.length !== 0 ? threads.map(thread =>
                         <div className="thread-preview">
-                            <h4>{thread.subject}</h4>
+                            <h4 data-date-created={thread.date_created}>{thread.subject}</h4>
                             <p>{thread.desc}</p>
                             <div className="bottom">
                                 <span>Members ({thread.members})</span>
