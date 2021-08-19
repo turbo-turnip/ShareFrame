@@ -25,9 +25,9 @@ const Comment = ({ comment, user, pfp, announcement, project, loggedIn }) => {
 
         if (request.status === 200) {
             if (response.status === "REMOVED")
-                setUpvotes(prevState => prevState - 1);
+                setUpvotes(prevState => prevState ? prevState : 0 - 1);
             else 
-                setUpvotes(prevState => prevState + 1);
+                setUpvotes(prevState => prevState ? prevState : 0 + 1);
 
             comment.upvotes = upvotes;
         }
@@ -53,9 +53,9 @@ const Comment = ({ comment, user, pfp, announcement, project, loggedIn }) => {
 
         if (request.status === 200) {
             if (response.status === "REMOVED")
-                setDownvotes(prevState => prevState - 1);
+                setDownvotes(prevState => prevState ? prevState : 0 - 1);
             else 
-                setDownvotes(prevState => prevState + 1);
+                setDownvotes(prevState => prevState ? prevState : 0 + 1);
 
             comment.downvotes = downvotes;
         }
@@ -72,7 +72,7 @@ const Comment = ({ comment, user, pfp, announcement, project, loggedIn }) => {
 
     useEffect(() => {
         console.log(upvotes);
-    }, [ upvotes ]);
+    }, [ upvotes, downvotes ]);
 
     return (
         <React.Fragment>

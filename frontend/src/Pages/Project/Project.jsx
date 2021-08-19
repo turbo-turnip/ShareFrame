@@ -4,6 +4,7 @@ import isLoggedIn from '../../IsLoggedIn';
 import { BACKEND_PATH, join } from '../../PATH';
 import Page from './ProjectViews/Page';
 import Feedback from './ProjectViews/Feedback';
+import Threads from './ProjectViews/Threads';
 import ProjectBar from './ProjectBar';
 
 const url = new URL(window.location.href);
@@ -96,6 +97,14 @@ const Project = () => {
             : ""}
             {account ? currView === "Feedback" &&
                 <Feedback 
+                    error={error} 
+                    project={project}
+                    loggedIn={loggedIn}
+                    owner={owner}
+                    account={account} />
+            : ""}
+            {account ? currView === "Threads" &&
+                <Threads 
                     error={error} 
                     project={project}
                     loggedIn={loggedIn}
