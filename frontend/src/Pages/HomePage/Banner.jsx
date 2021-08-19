@@ -6,7 +6,7 @@ const Banner = () => {
         const ctx = canvas.getContext("2d");
 
         let width = canvas.parentElement.getBoundingClientRect().width;
-        let height = width / 3 * 2;
+        let height = width / 3 * 2.5;
         canvas.width = width; canvas.height = height;
         let iw = window.innerWidth >= 980 ? 980 : window.innerWidth;
 

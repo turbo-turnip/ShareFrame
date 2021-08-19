@@ -2,7 +2,7 @@ import React from 'react';
 
 const AnnouncementPopup = ({ closeHandler, submitHandler }) => {
     return (
-        <form className="announcement-popup-new" onSubmit={e => {
+        <form className="popup-new" onSubmit={e => {
             e.preventDefault();
             submitHandler(e);
         }}>
