@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { BACKEND_PATH, FRONTEND_PATH, join } from '../../../PATH';
 import isLoggedIn from '../../../IsLoggedIn';
 import Nav from '../../../Components/Nav';
+import Popup from '../../../Components/Popup';
 
 const url = new URL(window.location.href);
 const searchParams = new URLSearchParams(url.search);
@@ -11,6 +12,7 @@ socket.onopen = () => console.log('Socket opened!');
 
 const ThreadPage = () => {
     const threadMessagesRef = useRef();
+    const threadPaneRef = useRef();
     const [ loggedIn, setLoggedIn ] = useState(false);
     const [ account, setAccount ] = useState();
     const [ owner, setOwner ] = useState(false);
@@ -20,6 +22,24 @@ const ThreadPage = () => {
     const [ error, setError ] = useState(false);
     const [ loading, setLoading ] = useState(true);
     const [ alreadyListening, setAlreadyListening ] = useState(false);
+    const [ closeError, setCloseError ] = useState(false);
+
+    const closeThreadHandler = () => {
+        if (thread && project) {
+            if (window.confirm("Are you sure you want to close this thread?")) {
+                socket.send(JSON.stringify({
+                    type: "close-thread",
+                    user: account.user_name, 
+                    pfp: account.pfp,
+                    threadSubject: thread.subject, 
+                    threadDesc: thread.desc, 
+                    threadCreated: thread.date_created,
+                    projectTitle: project.project_title,
+                    projectCreator: project.user_name
+                }));
+            }
+        }
+    }
 
     const fetchProject = async (user, name) => {
         const request = await fetch(join(BACKEND_PATH, "/project/getProject"), {
@@ -107,6 +127,9 @@ const ThreadPage = () => {
                 if (data.type === "thread-message") {
                     console.log(data.data);
                     setThreadMessages(prevState => [ ...prevState, data.data ]);
+                } else if (data.type === "close-error") {
+                    setCloseError(data.message);
+                    setTimeout(() => setCloseError(false), 1 * 5000 + 200);
                 }
             });
 
@@ -130,6 +153,8 @@ const ThreadPage = () => {
 
     useEffect(() => {
         threadMessagesRef.current = threadMessages;
+        if (threadPaneRef.current)
+            threadPaneRef.current.scrollTop = threadPaneRef.current.scrollHeight;
     }, [ threadMessages ]);
 
     useEffect(() => {
@@ -141,6 +166,7 @@ const ThreadPage = () => {
         <React.Fragment>
             {error && <h1 className="url-error">{error}</h1>}
             <Nav isLoggedIn={loggedIn} account={account} />
+            {closeError && <Popup type="error" message={closeError} />}
             {!error && thread && account && 
                 <div className="thread-page">
                     <div className="thread-info">
@@ -149,13 +175,14 @@ const ThreadPage = () => {
                     </div>
 
                     {!error && thread &&
-                        <div className="thread-messages">
+                        <div className="thread-messages" ref={threadPaneRef}>
                             {threadMessages && threadMessages.map(message => 
                                 <div className="thread-message" style={{
                                     background: message.user === account.user_name ? "rgb(36, 182, 255)" : "rgb(43, 61, 82)",
                                     position: "relative",
                                     left: message.user === account.user_name ? "100%" : "0%",
-                                    transform: message.user === account.user_name && "translateX(-100%)"
+                                    transform: message.user === account.user_name && "translateX(-100%)",
+                                    marginLeft: message.user === account.user_name ? "-1.5em" : "1.5em",
                                 }}>
                                     <div className="top">
                                         <img src={message.pfp} alt={message.user} />
@@ -182,8 +209,9 @@ const ThreadPage = () => {
 
                         e.target.querySelector("input").value = "";
                     }}>
-                        <input type="text" placeholder="Send a message to the thread..." maxLength="400" />
+                        <input type="text" placeholder="Send a message to the thread..." maxLength="400" required />
                         <button type="submit">Send</button>
+                        <button type="button" onClick={closeThreadHandler}>Close Thread</button>
                     </form>
                 </div>}
         </React.Fragment>

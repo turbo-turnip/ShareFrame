@@ -1137,8 +1137,16 @@ input[type=checkbox]:checked {
     cursor: pointer;
 }
 
+.thread-message-input > button:last-of-type {
+    margin: 0 .5em;
+    border-radius: 8px;
+    background: rgb(228, 72, 72);
+}
+
 .thread-messages {
     width: 100%;
+    overflow-y: scroll;
+    height: 60vh;
 }
 
 .thread-messages > .thread-message {

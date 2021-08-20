@@ -47,7 +47,6 @@ wss.on('connection', (socket) => {
                 .then(exists => {
                     if (exists.rows.length > 0) {
                         const project = exists.rows[0];
-                        console.log(project.threads);
             
                         let threadIndex = -1;
                         project.threads.forEach((thread, i) => {
@@ -59,6 +58,27 @@ wss.on('connection', (socket) => {
                         if (threadIndex > -1) {
                             project.threads[threadIndex].messages = data.messages;
                             db.query(`UPDATE projects SET threads = '${JSON.stringify(project.threads)}' WHERE project_title = $1 AND user_name = $2 RETURNING threads`, [ data.projectTitle, data.projectCreator ]);
+                        } else console.log("Can't find thread");
+                    } else console.log("Can't find project");
+                });
+        } else if (data.type === "close-thread") {
+            db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ data.projectTitle, data.projectCreator ])
+                .then(exists => {
+                    if (exists.rows.length > 0) {
+                        const project = exists.rows[0];
+            
+                        let threadIndex = -1;
+                        project.threads.forEach((thread, i) => {
+                            if (thread.subject === data.threadSubject && thread.desc === data.threadDesc && thread.date_created === data.threadCreated) {
+                                threadIndex = i;
+                            }
+                        });
+
+                        if (threadIndex > -1) {
+                            if (project.threads[threadIndex].user === data.user) {
+                                project.threads.splice(threadIndex, 1);
+                                db.query(`UPDATE projects SET threads = '${JSON.stringify(project.threads)}' WHERE project_title = $1 AND user_name = $2 RETURNING threads`, [ data.projectTitle, data.projectCreator ]);
+                            } else socket.send(JSON.stringify({ type: "close-error", message: "You aren't allowed to close this thread" }));
                         } else console.log("Can't find thread");
                     } else console.log("Can't find project");
                 });
