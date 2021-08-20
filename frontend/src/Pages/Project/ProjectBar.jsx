@@ -50,11 +50,11 @@ const ProjectBar = ({ updater, currView, project, owner }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
             </div>
-            <div className={`option ${currView === "Page" ? "curr" : ""}`} onClick={(e) => updater(e.target.innerHTML.replace(/<p>|<\/p>/g, ''))}>
+            <div id="page" className={`option ${currView === "Page" ? "curr" : ""}`} onClick={(e) => updater(e.target.innerHTML.replace(/<p>|<\/p>/g, ''))}>
                 {project && <p>Page</p>}
             </div>
             {project ? project.allow_feedback === 'TRUE' &&
-                <div className={`option ${currView === "Feedback" ? "curr" : ""}`} onClick={(e) => updater(e.target.innerHTML.replace(/<p>|<\/p>/g, ''))}>
+                <div id="feedback" className={`option ${currView === "Feedback" ? "curr" : ""}`} onClick={(e) => updater(e.target.innerHTML.replace(/<p>|<\/p>/g, ''))}>
                     {<p>Feedback</p>}
                 </div> : ""}
             {project ? project.allow_threads === 'TRUE' &&

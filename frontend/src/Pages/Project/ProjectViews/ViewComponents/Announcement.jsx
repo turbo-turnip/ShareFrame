@@ -17,7 +17,7 @@ const types = [
     { name: "Announcement", color: "#033d70" }
 ];
 
-const Announcement = ({ announcement, loggedIn, owner, project, username, pfp }) => {
+const Announcement = ({ announcement, loggedIn, owner, project, username, pfp, setCurrView }) => {
     const commentsRef = useRef();
     const [ typeColor, setTypeColor ] = useState();
     const [ successPopup, setSuccessPopup ] = useState(false);
@@ -117,7 +117,7 @@ const Announcement = ({ announcement, loggedIn, owner, project, username, pfp })
             <h4>{announcement.desc}</h4>
             {loggedIn && 
                 <div className="buttons">
-                    {project.allow_threads === 'TRUE' && <button>Create Thread</button>}
+                    {project.allow_threads === 'TRUE' && <button onClick={() => setCurrView('Threads')}>Create Thread</button>}
                     {loggedIn && <button>Report Bug</button>}
                     {loggedIn && <button onClick={() => {
                         setNewComment(true);

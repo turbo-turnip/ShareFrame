@@ -93,7 +93,8 @@ const Project = () => {
                     project={project}
                     loggedIn={loggedIn}
                     owner={owner}
-                    account={account} />
+                    account={account}
+                    setCurrView={setCurrView} />
             : ""}
             {account ? currView === "Feedback" &&
                 <Feedback 

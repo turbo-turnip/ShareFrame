@@ -4,7 +4,7 @@ import Announcement from './Announcement';
 import { BACKEND_PATH, join } from '../../../../PATH';
 import Popup from '../../../../Components/Popup';
 
-const ProjectPane = ({ project, owner, loggedIn, account }) => {
+const ProjectPane = ({ project, owner, loggedIn, account, setCurrView }) => {
     const [ newProjectPopup, setNewProjectPopup ] = useState(false);
     const [ errorPopup, setErrorPopup ] = useState(false);
     const [ successPopup, setSuccessPopup ] = useState(false);
@@ -67,7 +67,8 @@ const ProjectPane = ({ project, owner, loggedIn, account }) => {
                         owner={owner} 
                         loggedIn={loggedIn}
                         username={account.user_name}
-                        pfp={account.pfp} />
+                        pfp={account.pfp}
+                        setCurrView={setCurrView} />
                     ) : <h1>Invalid project</h1>
             }
         </div>
