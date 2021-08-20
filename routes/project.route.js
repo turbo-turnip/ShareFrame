@@ -358,7 +358,7 @@ router.post('/createThread', async (req, res) => {
                     user: username, pfp,
                     date_created: dateCreated,
                     members: 1,
-                    messages: 0
+                    messages: []
                 };
 
                 const project = exists.rows[0];

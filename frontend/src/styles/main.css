@@ -519,7 +519,7 @@ input[type=checkbox]:checked {
     padding: 12vh 2em 0 2em;
 }
 
-.project-page .url-error {
+.url-error {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1071,4 +1071,98 @@ input[type=checkbox]:checked {
     content: attr(data-date-created);
     margin-left: 1em;
     color: var(--light-blue);
+}
+
+.thread-page {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.thread-page .thread-info {
+    width: 100%;
+    background: var(--dark-1);
+    padding: 1em 1.5em;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    min-height: 150px;
+}
+
+.thread-page .thread-info > h1 {
+    display: flex;
+    align-items: center;
+}
+
+.thread-page .thread-info > h1::after {
+    content: attr(data-date-created);
+    margin-left: 0.8em;
+    color: var(--light-blue);
+    font-weight: lighter;
+    font-size: .6em;
+}
+
+.thread-page .thread-info::after {
+    content: "";
+    width: 30%;
+    height: 200%;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%) skewX(330deg);
+    background: linear-gradient(90deg, var(--light-blue) 0%, transparent 100%);
+    min-width: 100px;
+}
+
+.thread-message-input {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    display: flex;
+    padding: 1em 1em;
+}
+
+.thread-message-input > input {
+    flex: 1;
+    font-size: 1.4em;
+    border-radius: 6px 0 0 6px;
+}
+
+.thread-message-input > button {
+    font-size: 1.2em;
+    background: var(--dark-2);
+    border: none;
+    border-radius: 0 6px 6px 0;
+    padding: 0 1.5em;
+    cursor: pointer;
+}
+
+.thread-messages {
+    width: 100%;
+}
+
+.thread-messages > .thread-message {
+    width: 100%;
+    max-width: 400px;
+    margin: 1.5em 0;
+    border-radius: 6px;
+    padding: .5em .8em;
+    position: relative;
+}
+
+.thread-message > .top {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    background: var(--dark-2);
+    display: flex;
+    align-items: center;
+    padding: .2em .4em;
+    border-radius: 20px;
+}
+
+.thread-message > .top > img {
+    width: 20px;
+    height: 20px;
+    margin-right: .3em;
 }

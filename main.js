@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const authRouter = require('./routes/auth.route');
 const projectRouter = require('./routes/project.route');
+const WebSocket = require('ws');
+const { pool: db } = require('./database');
 
 // necessary setup
 const app = express();
@@ -24,4 +26,42 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: "Welcome to the ShareFrame ReST API" });
 });
 
-app.listen(process.env.PORT || 8000, () => console.log('Server running...'));
+const server = app.listen(process.env.PORT || 8000, () => console.log('Server running...'));
+
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (socket) => {
+    console.log('user connected');
+
+    socket.on('message', (data, binary) => {
+        data = JSON.parse(data.toString());
+        if (data.type === "thread-message") 
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN)
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify({ type: "thread-message", data }), { binary });
+                    }
+            });
+        else if (data.type === "save-thread") {
+            db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ data.projectTitle, data.projectCreator ])
+                .then(exists => {
+                    if (exists.rows.length > 0) {
+                        const project = exists.rows[0];
+                        console.log(project.threads);
+            
+                        let threadIndex = -1;
+                        project.threads.forEach((thread, i) => {
+                            if (thread.subject === data.threadSubject && thread.desc === data.threadDesc && thread.date_created === data.threadCreated) {
+                                threadIndex = i;
+                            }
+                        });
+
+                        if (threadIndex > -1) {
+                            project.threads[threadIndex].messages = data.messages;
+                            db.query(`UPDATE projects SET threads = '${JSON.stringify(project.threads)}' WHERE project_title = $1 AND user_name = $2 RETURNING threads`, [ data.projectTitle, data.projectCreator ]);
+                        } else console.log("Can't find thread");
+                    } else console.log("Can't find project");
+                });
+        }
+    });
+});

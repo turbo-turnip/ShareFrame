@@ -72,7 +72,7 @@ const Feedback = ({ error, project, owner, loggedIn, account }) => {
 
             setFeedbackToShow(matches.sort((a, b) => b.hierarchy - a.hierarchy));
         }
-    }, [ searchInput ]);
+    }, [ searchInput, feedback ]);
 
     return (
         <div className="project-feedback">

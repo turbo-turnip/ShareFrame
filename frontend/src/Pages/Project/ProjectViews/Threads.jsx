@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BACKEND_PATH, join } from '../../../PATH';
+import { BACKEND_PATH, FRONTEND_PATH, join } from '../../../PATH';
 import ThreadPopup from './ViewComponents/ThreadPopup';
 import Popup from '../../../Components/Popup';
 
@@ -42,6 +42,16 @@ const Threads = ({ error, project, owner, loggedIn, account }) => {
         }
     }
 
+    const getMembers = (thread) => {
+        let members = [];
+        thread.messages.forEach(message => {
+            if (!members.includes(message.user))
+                members.push(message.user);
+        });
+
+        return members.length;
+    }
+
     useEffect(() => {
         if (project) 
             if (project.threads)
@@ -60,12 +70,12 @@ const Threads = ({ error, project, owner, loggedIn, account }) => {
                 <React.Fragment>
                     <h1>Threads{loggedIn && <button onClick={() => setNewThreadPopup(true)}>Create New</button>}</h1>
                     {threads.length !== 0 ? threads.map(thread =>
-                        <div className="thread-preview">
+                        <div className="thread-preview" onClick={() => document.location.href = join(FRONTEND_PATH, `/project/thread?name=${project.project_title}&user=${project.user_name}&thread_subject=${thread.subject}&thread_creator=${thread.user}`)}>
                             <h4 data-date-created={thread.date_created}>{thread.subject}</h4>
                             <p>{thread.desc}</p>
                             <div className="bottom">
-                                <span>Members ({thread.members})</span>
-                                <span>Messages ({thread.messages})</span>
+                                <span>Members ({getMembers(thread)})</span>
+                                <span>Messages ({thread.messages.length})</span>
                             </div>
                         </div>
                     ) : <h1 className="no-threads-message">This is where threads will appear!</h1>}
