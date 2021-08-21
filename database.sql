@@ -37,6 +37,7 @@ CREATE TABLE projects (
     reviews JSON,
     supporters JSON,
     members JSON,
+    bugs JSON,
     user_pass TEXT,
     announcements JSON
 );

@@ -1258,3 +1258,35 @@ input[type=checkbox]:checked {
 .review > .top .rating > *:not(.filled-in) {
     stroke: var(--light-blue);
 }
+
+.project-bugs > h1:last-of-type.no-bugs-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.project-bugs {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.project-bugs > h1 > button {
+    background: var(--dark-1);
+    border-radius: 6px;
+    border: none;
+    font-size: 0.8em;
+    padding: .3em .5em;
+    cursor: pointer;
+    margin-left: .5em;
+}
+
+.project-bugs > h1 {
+    display: flex;
+    align-items: center;
+}
+
+.project-bugs > h1 > button:hover {
+    opacity: 0.8;
+}
