@@ -6,6 +6,7 @@ import Page from './ProjectViews/Page';
 import Feedback from './ProjectViews/Feedback';
 import Threads from './ProjectViews/Threads';
 import ProjectBar from './ProjectBar';
+import Reviews from './ProjectViews/Reviews';
 
 const url = new URL(window.location.href);
 const searchParams = new URLSearchParams(url.search);
@@ -110,6 +111,13 @@ const Project = () => {
                     project={project}
                     loggedIn={loggedIn}
                     owner={owner}
+                    account={account} />
+            : ""}
+            {account ? currView === "Reviews" &&
+                <Reviews
+                    error={error} 
+                    project={project}
+                    loggedIn={loggedIn}
                     account={account} />
             : ""}
             {!error && <ProjectBar updater={updateCurrViewHandler} currView={currView} project={project} owner={owner} />}

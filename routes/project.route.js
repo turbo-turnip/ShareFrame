@@ -377,4 +377,44 @@ router.post('/createThread', async (req, res) => {
     } else res.status(403).json({ message: "Invalid user" });
 });
 
+router.post('/createReview', async (req, res) => {
+    const { username, pfp, title, projectCreator, password, reviewTitle, review, reviewRating } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ title, projectCreator ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ username, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        const passwordCorrect = await bcrypt.compare(password, userExists.rows[0].user_pass);
+
+        if (passwordCorrect) {
+            if (exists.rows.length > 0) {
+                const dateCreated = `${new Date().getMonth()}/${new Date().getDate()}/${new Date().getFullYear()}`;
+
+
+                const userReview = {
+                    title: reviewTitle.replace("'", "''"),
+                    review: review.replace("'", "''"),
+                    review_rating: reviewRating,
+                    user: username,
+                    pfp,
+                    date_created: dateCreated
+                };
+
+                const project = exists.rows[0];
+
+                if (!project.reviews) {
+                    project.reviews = [ userReview ];
+                } else {
+                    project.reviews.unshift(userReview);
+                }
+
+                await db.query(`UPDATE projects SET reviews = E'${JSON.stringify(project.reviews)}' WHERE project_title = $1 AND user_name = $2`, [ title, projectCreator ]);
+                const newReviews = await db.query('SELECT reviews FROM projects WHERE project_title = $1 AND user_name = $2', [ title, projectCreator ]);
+
+                res.status(201).json({ message: "Successfully created feedback", reviews: newReviews.rows[0].reviews });
+            } else res.status(404).json({ message: "Project not found" });
+        } else res.status(403).json({ message: "Invalid password" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
 module.exports = router;
