@@ -1290,3 +1290,58 @@ input[type=checkbox]:checked {
 .project-bugs > h1 > button:hover {
     opacity: 0.8;
 }
+
+.project-bugs > .bug {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background: var(--dark-1);
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin: 1em 0;
+    margin-top: 30px;
+}
+
+.project-bugs > .bug > .user {
+    position: absolute;
+    left: -20px;
+    top: -15px;
+    display: flex;
+    gap: 8px;
+    background: var(--dark-2);
+    border-radius: 20px;
+    padding: 3px 7px;
+}
+
+.project-bugs > .bug .user > img {
+    width: 20px;
+    height: 20px;
+}
+
+.project-bugs > .bug .top {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.project-bugs .bug .top > .version {
+    background: var(--light-blue);
+    border-radius: 20px;
+    padding: 0px 8px;
+}
+
+.project-bugs .bug details {
+    margin-top: 6px;
+}
+
+.project-bugs .bug details > img {
+    border-radius: 10px;
+    margin: 1em .2em;
+    border: 5px solid var(--dark-2);
+    cursor: pointer;
+}

@@ -24,7 +24,7 @@ const BugPopup = ({ closeHandler, submitHandler, versions }) => {
             </div>
             <div className="input-field">
                 <label>Screenshots</label>
-                <input type="file" />
+                <input type="file" multiple={true} />
             </div>
             <button type="submit">Submit</button>
         </form>

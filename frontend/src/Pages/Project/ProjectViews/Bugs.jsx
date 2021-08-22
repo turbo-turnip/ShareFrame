@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BACKEND_PATH, FRONTEND_PATH, join } from '../../../PATH';
 import Popup from '../../../Components/Popup';
 import BugPopup from './ViewComponents/BugPopup';
+import Bug from './ViewComponents/Bug';
 
 const toBase64 = (file) => {
     return new Promise((res) => {
@@ -31,7 +32,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
     const [ versions, setVersions ] = useState([]);
 
     const newBugHandler = async (e) => {
-        const [ title, summary, version, screenshots ] = e.target.querySelectorAll("input");
+        const [ title, summary, version, screenshots ] = e.target.querySelectorAll("input, select");
 
         const password = prompt('Please enter your user password', '');
 
@@ -50,6 +51,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
                     pfp: account.pfp,
                     projectCreator: project.user_name,
                     password,
+                    projectTitle: project.project_title,
                     title: title.value,
                     summary: summary.value,
                     version: version.value,
@@ -59,6 +61,8 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
 
             const response = await request.json();
 
+            console.log(response);
+
             if (request.status !== 201) {
                 setErrorPopup(response.message);
                 setNewBugPopup(false);
@@ -67,7 +71,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
                 setSuccessPopup(response.message);
                 setNewBugPopup(false);
                 setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
-                setBugs(response.bugs);
+                // setBugs(response.bugs);
             }
         }
     }
@@ -97,7 +101,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
             {!error && 
                 <React.Fragment>
                     <h1>Bugs{loggedIn && <button onClick={() => setNewBugPopup(true)}>Report a bug</button>}</h1>
-                    {bugs.length !== 0 ? bugs.map(bug => <h4>{bug.title}</h4>) : <h1 className="no-bugs-message">This is where reviews will appear!</h1>}
+                    {bugs.length !== 0 ? bugs.map(bug => <Bug bug={bug} />) : <h1 className="no-bugs-message">This is where reviews will appear!</h1>}
                 </React.Fragment>}
         </div>
     );

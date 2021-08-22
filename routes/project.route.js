@@ -417,4 +417,48 @@ router.post('/createReview', async (req, res) => {
     } else res.status(403).json({ message: "Invalid user" });
 });
 
+router.post('/reportBug', async (req, res) => { 
+    const { username, pfp, projectCreator, password, projectTitle, title, summary, version, screenshots } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, projectCreator ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ username, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        const passwordCorrect = await bcrypt.compare(password, userExists.rows[0].user_pass);
+
+        if (passwordCorrect) {
+            if (exists.rows.length > 0) {
+                const dateCreated = `${new Date().getMonth()}/${new Date().getDate()}/${new Date().getFullYear()}`;
+
+                const bug = {
+                    title: title.replace("'", "''"),
+                    summary: summary.replace("'", "''"),
+                    version,
+                    screenshots: JSON.stringify(screenshots),
+                    user: username,
+                    pfp,
+                    date_created: dateCreated
+                };
+
+                const project = exists.rows[0];
+
+                if (!project.bugs) {
+                    project.bugs = [ bug ];
+                } else {
+                    project.bugs.unshift(bug);
+                }
+
+                const validVersion = /([0-9])*\.([0-9])*(\.([0-9])*)?/gmi.test(version);
+
+                if (validVersion) {
+                    await db.query(`UPDATE projects SET bugs = '${JSON.stringify(project.bugs)}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
+                    const newBugs = await db.query('SELECT bugs FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, projectCreator ]);
+
+                    res.status(201).json({ message: "Successfully created feedback", bugs: newBugs.rows[0].reviews });
+                } else res.status(406).json({ message: "Invalid version" });
+            } else res.status(404).json({ message: "Project not found" });
+        } else res.status(403).json({ message: "Invalid password" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
 module.exports = router;
