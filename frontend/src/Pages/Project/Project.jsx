@@ -8,13 +8,14 @@ import Threads from './ProjectViews/Threads';
 import ProjectBar from './ProjectBar';
 import Reviews from './ProjectViews/Reviews';
 import Bugs from './ProjectViews/Bugs';
+import Polls from './ProjectViews/Polls';
 
 const url = new URL(window.location.href);
 const searchParams = new URLSearchParams(url.search);
 
 const Project = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
-    const [ account, setAccount ] = useState();
+    const [ account, setAccount ] = useState({});
     const [ owner, setOwner ] = useState(false);
     const [ project, setProject ] = useState();
     const [ error, setError ] = useState(false);
@@ -86,6 +87,7 @@ const Project = () => {
     return (
         <React.Fragment>
             <Nav isLoggedIn={loggedIn} account={account} />
+            {console.log(account)}
             {account ? currView === "Page" &&
                 <Page 
                     error={error} 
@@ -123,6 +125,13 @@ const Project = () => {
             : ""}
             {account ? currView === "Bugs" &&
                 <Bugs 
+                    error={error}
+                    project={project}
+                    loggedIn={loggedIn}
+                    account={account} />
+            : ""}
+            {account ? currView === "Polls" &&
+                <Polls 
                     error={error}
                     project={project}
                     loggedIn={loggedIn}

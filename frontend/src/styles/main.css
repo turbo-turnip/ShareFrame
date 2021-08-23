@@ -19,6 +19,7 @@
 body {
     background: var(--dark-3);
     width: 100vw;
+    padding-bottom: 80px;
 }
 
 nav.navbar {
@@ -334,7 +335,7 @@ input:focus {
 }
 
 input::placeholder {
-    color: #fff;
+    color: #9f9f9f;
 }
 
 .auth-form > button {
@@ -456,7 +457,7 @@ input::placeholder {
     width: 300px;
 }
 
-input[type=checkbox] {
+input[type=checkbox]:not(.poll-checkbox) {
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -467,7 +468,7 @@ input[type=checkbox] {
     margin-top: .3em;
 }
 
-input[type=checkbox]::after {
+input[type=checkbox]:not(.poll-checkbox)::after {
     content: "";
     width: 35px;
     height: 35px;
@@ -482,12 +483,12 @@ input[type=checkbox]::after {
     transition: .4s;
 }
 
-input[type=checkbox]:checked::after {
+input[type=checkbox]:not(.poll-checkbox):checked::after {
     left: calc(60% + 3px);
     background: var(--dark-2);
 }
 
-input[type=checkbox]:checked {
+input[type=checkbox]:not(.poll-checkbox):checked {
     background: var(--light-blue);
 }
 
@@ -777,23 +778,23 @@ input[type=checkbox]:checked {
     font-size: 1.7em;
 }
 
-.popup-new .input-field {
+.input-field {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1em;
 }
 
-.popup-new .input-field label {
+.input-field label {
     font-size: 1.2em;
     margin-bottom: .2em;
 }
 
-.popup-new .input-field input {
+.input-field input {
     width: 100%;
 }
 
-.popup-new .input-field select {
+.input-field select {
     width: 100%;
     background: var(--dark-1);
     border: none;
@@ -1343,5 +1344,156 @@ input[type=checkbox]:checked {
     border-radius: 10px;
     margin: 1em .2em;
     border: 5px solid var(--dark-2);
+    cursor: pointer;
+}
+
+.project-polls {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.project-polls > h1 > button {
+    background: var(--dark-1);
+    border-radius: 6px;
+    border: none;
+    font-size: 0.8em;
+    padding: .3em .5em;
+    cursor: pointer;
+    margin-left: .5em;
+}
+
+.project-polls > h1 {
+    display: flex;
+    align-items: center;
+}
+
+.project-polls > h1 > button:hover {
+    opacity: 0.8;
+}
+
+.project-polls > h1:last-of-type.no-polls-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.new-poll .input-field {
+    margin-top: 1em;
+    max-width: 600px;
+}
+
+.create-poll-question {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    background: var(--dark-1);
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px 0 0 8px;
+    padding: 5px;
+}
+
+.create-poll-question > button {
+    font-size: 3em;
+    width: 50px;
+    background: var(--dark-3);
+    border: none;
+    border-radius: 6px 0 0 6px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .3em 0;
+}
+
+.create-poll-question > button:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.create-poll-question > button::after {
+    content: attr(data-tooltip);
+    position: fixed;
+    left: 0;
+    font-size: 20px;
+    width: max-content;
+    background: var(--light-blue);
+    transform: translate(calc(-100% - 30px), -10%);
+    padding: .3em .6em;
+    border-radius: 6px;
+    display: none;
+}
+
+.create-poll-question > button::before {
+    content: "";
+    position: fixed;
+    left: 0;
+    transform: translate(calc(-100% - 21px), -5%);
+    background: var(--light-blue);
+    width: 10px;
+    height: 20px;
+    clip-path: polygon(
+        0% 0%,
+        100% 50%,
+        0% 100%
+    );
+    display: none;
+    z-index: 1000;
+}
+
+.create-poll-question > button:hover::after,
+.create-poll-question > button:hover::before {
+    display: block;
+}
+
+.create-poll-question > button img {
+    width: 60%;
+}
+
+.create-poll-question > button:nth-of-type(2) img {
+    width: 80% !important;
+}
+
+.new-poll .new-single-choice {
+    width: 80%;
+    background: var(--dark-2);
+    margin-bottom: 2em;
+    padding: 1.2em;
+    border-radius: 12px;
+    padding-top: 0;
+}
+
+.new-poll .new-single-choice input[type=checkbox] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: .5em;
+    cursor: pointer;
+    transform: translateY(25%);
+}
+
+.new-poll .new-single-choice input[type=checkbox]:checked {
+    background: var(--light-blue);
+}
+
+.new-poll .new-single-choice > .x {
+    font-size: 0.5em;
+    position: relative;
+    left: calc(100% - 10px);
+    bottom: 20px;
+    cursor: pointer !important;
+    width: min-content;
+    transform: scale(6) translateY(50%);
+}
+
+.new-poll .new-single-choice span {
+    font-size: 2em;
+    margin-left: .3em;
     cursor: pointer;
 }
