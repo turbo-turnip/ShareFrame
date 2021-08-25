@@ -87,7 +87,6 @@ const Project = () => {
     return (
         <React.Fragment>
             <Nav isLoggedIn={loggedIn} account={account} />
-            {console.log(account)}
             {account ? currView === "Page" &&
                 <Page 
                     error={error} 

@@ -71,7 +71,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
                 setSuccessPopup(response.message);
                 setNewBugPopup(false);
                 setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
-                // setBugs(response.bugs);
+                setBugs(response.bugs);
             }
         }
     }
@@ -101,7 +101,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
             {!error && 
                 <React.Fragment>
                     <h1>Bugs{loggedIn && <button onClick={() => setNewBugPopup(true)}>Report a bug</button>}</h1>
-                    {bugs.length !== 0 ? bugs.map(bug => <Bug bug={bug} />) : <h1 className="no-bugs-message">This is where reviews will appear!</h1>}
+                    {bugs.length !== 0 ? bugs.map(bug => <Bug bug={bug} />) : <h1 className="no-bugs-message">This is where bugs will appear!</h1>}
                 </React.Fragment>}
         </div>
     );

@@ -70,10 +70,6 @@ const Comment = ({ comment, user, pfp, announcement, project, loggedIn }) => {
         }
     }, [ comment ]);
 
-    useEffect(() => {
-        console.log(upvotes);
-    }, [ upvotes, downvotes ]);
-
     return (
         <React.Fragment>
             {comment && 

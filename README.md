@@ -35,3 +35,4 @@ __Version 1.0.0__ Working on project creation
 - Make a more user friendly interface for create page
 - Create page redesign 
 - Fix popup bugs
+- Fix announcement comment upvoting system
