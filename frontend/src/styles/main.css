@@ -1510,7 +1510,7 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 
 .poll-preview {
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1637,4 +1637,59 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 
 .poll-page > button:hover {
     opacity: 0.8;
+}
+
+.poll-responses {
+    width: 100vw;
+}
+
+.poll-responses > .poll-response {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background: var(--dark-1);
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin: 1em 0;
+    margin-top: 30px;   
+}
+
+.poll-response > img {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: -13px;
+    top: -13px;
+}
+
+.poll-response .response-answer  {
+    font-size: 1.2em;
+    margin-top: .5em;
+    position: relative;
+    margin-left: 1em;
+}
+
+.poll-response .response-answer::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: 0;
+    background: var(--dark-2);
+    width: 5px;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.poll-response .response-answer h4:not(span) {
+    color: var(--light-blue);
+    font-weight: normal;
+    margin: .3em 0;
+}
+
+.poll-response .response-answer h4 > span {
+    font-weight: bold;
 }

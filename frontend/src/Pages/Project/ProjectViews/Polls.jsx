@@ -4,6 +4,7 @@ import Popup from '../../../Components/Popup';
 import NewPoll from './ViewComponents/NewPoll';
 import PollPreview from './ViewComponents/PollPreview';
 import Poll from './ViewComponents/Poll';
+import Responses from './ViewComponents/Responses';
 
 const Polls = ({ error, project, owner, loggedIn, account }) => {
     const [ polls, setPolls ] = useState(project && project.polls ? project.polls : []);
@@ -12,6 +13,7 @@ const Polls = ({ error, project, owner, loggedIn, account }) => {
     const [ member, setMember ] = useState(false);
     const [ newPoll, setNewPoll ] = useState(false);
     const [ answerPoll, setAnswerPoll ] = useState(false);
+    const [ viewResponses, setViewResponses ] = useState(false);
 
     useEffect(() => {
         if (project) {
@@ -25,20 +27,19 @@ const Polls = ({ error, project, owner, loggedIn, account }) => {
         }
     }, [ project ]);
 
-    useEffect(() => console.log(answerPoll), [ answerPoll ]);
-
     return (
         <div className="project-polls">
             {successPopup && <Popup type="success" message={successPopup} />}
             {errorPopup && <Popup type="error" message={errorPopup} />}
             {error && <h1 className="url-error">{error}</h1>}
-            {(!error && !newPoll && !answerPoll) && 
+            {(!error && !newPoll && !answerPoll && !viewResponses) && 
                 <React.Fragment>
                     <h1>Polls{(loggedIn && member) && <button onClick={() => setNewPoll(true)}>Create Poll</button>}</h1>
-                    {polls.length !== 0 ? polls.map(poll => <PollPreview poll={poll} member={member} answerPollHandler={() => { setAnswerPoll(poll) }} />) : <h1 className="no-polls-message">This is where polls will appear!</h1>}
+                    {polls.length !== 0 ? polls.map((poll, i) => <PollPreview poll={poll} member={member} answerPollHandler={() => { setAnswerPoll(poll) }} viewResponsesHandler={() => setViewResponses(i + 1)} />) : <h1 className="no-polls-message">This is where polls will appear!</h1>}
                 </React.Fragment>}
-            {(!error && newPoll && !answerPoll) && <NewPoll account={account} project={project} />}
-            {(!error && answerPoll) && <Poll poll={answerPoll} project={project} account={account} />}
+            {(!error && newPoll && !answerPoll && !viewResponses) && <NewPoll account={account} project={project} />}
+            {(!error && answerPoll && !viewResponses) && <Poll poll={answerPoll} project={project} account={account} />}
+            {(!error && viewResponses && !answerPoll && polls) && <Responses responses={JSON.parse(polls[viewResponses - 1].responses.replace(/\"\[/gmi, '[').replace(/\\\"/gmi, '"').replace(/\\\[/gmi, '[').replace(/\]\"/gmi, ']'))} poll={polls[viewResponses - 1]} />}
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
  
-const PollPreview = ({ poll, answerPollHandler, member }) => {
+const PollPreview = ({ poll, answerPollHandler, member, viewResponsesHandler }) => {
     const [ questions, setQuestions ] = useState(0);
     const [ responses, setResponses ] = useState(0);
 
@@ -24,8 +24,8 @@ const PollPreview = ({ poll, answerPollHandler, member }) => {
             <div className="bottom">
                 <span>Questions ({questions.length})</span>
                 <span>Responses ({responses.length})</span>
-                {/* Add !owner check so that only supporters can answer polls */}
-                <button onClick={answerPollHandler}>Answer Poll</button>
+                {member && <button onClick={answerPollHandler}>Answer Poll</button>}
+                {member && <button onClick={viewResponsesHandler}>View Responses</button>}
             </div>
         </div>
     );
