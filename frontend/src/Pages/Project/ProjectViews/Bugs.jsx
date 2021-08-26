@@ -61,8 +61,6 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
 
             const response = await request.json();
 
-            console.log(response);
-
             if (request.status !== 201) {
                 setErrorPopup(response.message);
                 setNewBugPopup(false);
@@ -91,6 +89,8 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
             }
         }
     }, [ project ]);
+
+    /* fix line 103/104 bugs is undefined on new bug */
 
     return (
         <div className="project-bugs">

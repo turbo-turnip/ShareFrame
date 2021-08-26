@@ -120,7 +120,8 @@ const Project = () => {
                     error={error} 
                     project={project}
                     loggedIn={loggedIn}
-                    account={account} />
+                    account={account}
+                    owner={owner} />
             : ""}
             {account ? currView === "Bugs" &&
                 <Bugs 

@@ -45,7 +45,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
     }
 
     useEffect(() => {
-        if (project) 
+        if (project)
             if (project.reviews)
                 setReviews(project.reviews);
     }, [ project ]);
@@ -58,6 +58,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
             {error && <h1 className="url-error">{error}</h1>}
             {!error && 
                 <React.Fragment>
+                    {console.log(owner)}
                     <h1>Reviews{loggedIn && !owner && <button onClick={() => setNewReviewPopup(true)}>Create New</button>}</h1>
                     {reviews.length !== 0 ? reviews.map(review => <Review review={review} />) : <h1 className="no-reviews-message">This is where reviews will appear!</h1>}
                 </React.Fragment>}

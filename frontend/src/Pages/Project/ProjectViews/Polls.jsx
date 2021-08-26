@@ -38,7 +38,7 @@ const Polls = ({ error, project, owner, loggedIn, account }) => {
                     {polls.length !== 0 ? polls.map(poll => <PollPreview poll={poll} member={member} answerPollHandler={() => { setAnswerPoll(poll) }} />) : <h1 className="no-polls-message">This is where polls will appear!</h1>}
                 </React.Fragment>}
             {(!error && newPoll && !answerPoll) && <NewPoll account={account} project={project} />}
-            {(!error && answerPoll) && <Poll poll={answerPoll} project={project} />}
+            {(!error && answerPoll) && <Poll poll={answerPoll} project={project} account={account} />}
         </div>
     );
 }

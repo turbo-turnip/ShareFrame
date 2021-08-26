@@ -34,7 +34,7 @@ const NewPoll = ({ account, project }) => {
                         type: "Single",
                         title: element.children[1].children[1].value,
                         desc: element.children[2].children[1].value,
-                        choices
+                        choices: JSON.stringify(choices)
                     };
                 } else if (questions[i].type === "TextBox") {
                     tmp[i] = {
@@ -50,7 +50,7 @@ const NewPoll = ({ account, project }) => {
                         type: "Multiple",
                         title: element.children[1].children[1].value,
                         desc: element.children[2].children[1].value,
-                        choices
+                        choices: JSON.stringify(choices)
                     };
                 }
                 i++;

@@ -7,7 +7,7 @@ const useForceUpdate = () => {
 
 const MultipleQuestion = ({ question, answered, setAnswered, index }) => {
     const forceUpdate = useForceUpdate();
-    const [ choices, setChoices ] = useState(question && question.choices && question.choices);
+    const [ choices, setChoices ] = useState(question && question.choices && JSON.parse(question.choices));
 
     useEffect(() => {
         setChoices(prevState => prevState.map(value => { 

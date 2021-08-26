@@ -521,13 +521,15 @@ router.post('/submitPollAnswer', async (req, res) => {
                 });
 
                 if (pollIndex > -1) {
-                    project.polls[pollIndex].responses.unshift({
-                        user: username.replace("'", "''"),
-                        pfp: pfp.replace("'", "''"),
-                        answers: JSON.stringify(answers).replace("'", "''")
+                    let responses = JSON.parse(project.polls[pollIndex].responses);
+                    responses.unshift({
+                        user: username,
+                        pfp,
+                        answers: JSON.stringify(answers)
                     });
 
-                    await db.query(`UPDATE projects SET polls = '${JSON.stringify(project.polls)}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
+                    project.polls[pollIndex].responses = JSON.stringify(responses).replace(/\\\\/gm, '').replace(/\'/gm, "^");
+                    await db.query(`UPDATE projects SET polls = '${JSON.stringify(project.polls).replace(/\\\\/gm, '').replace(/\'/gm, "^")}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
 
                     res.status(201).json({ message: "Successfully submitted response" });
                 } else res.status(404).json({ message: "Poll not found" });

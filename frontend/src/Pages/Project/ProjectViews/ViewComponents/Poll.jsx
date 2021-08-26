@@ -5,7 +5,7 @@ import MultipleQuestion from './MultipleQuestion';
 import Popup from '../../../../Components/Popup';
 import { BACKEND_PATH, join } from '../../../../PATH';
 
-const Poll = ({ poll, project }) => {
+const Poll = ({ poll, project, account }) => {
     const questionsRef = useRef();
     const [ answered, setAnswered ] = useState(new Array(JSON.parse(poll.questions).length).fill(false));
     const [ questions, setQuestions ] = useState([]);
@@ -14,9 +14,8 @@ const Poll = ({ poll, project }) => {
 
     const submitHandler = async () => {
         if (answered.includes(true)) {
-            // const password = prompt('Please enter your user password.');
+            const password = prompt('Please enter your user password.');
 
-            let i = 0;
             let answers = [];
             for (let child of questionsRef.current.children) {
                 const type = 
@@ -36,28 +35,45 @@ const Poll = ({ poll, project }) => {
                     desc: child.children[1].innerHTML,
                     responses
                 });    
-
-                i++;
             }
 
-            console.log(answers);
+            answers = answers.map(answer => {
+                let answerResponses = typeof answer.responses === 'string' ? answer.responses.split() : answer.responses;
+                answerResponses = answerResponses.map(res => {
+                    if (typeof res === 'string')
+                        return { value: res };
+                    else return { ...res, selected: res.selected.toString() }
+                });
+                return { ...answer, responses: JSON.stringify(answerResponses) };
+            });
 
-        //     const request = await fetch(join(BACKEND_PATH, "/project/submitPollAnswer"), {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({})
-        //     });
+            const request = await fetch(join(BACKEND_PATH, "/project/submitPollAnswer"), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: account.user_name, 
+                    pfp: account.pfp, 
+                    projectCreator: project.user_name, 
+                    password, 
+                    projectTitle: project.project_title, 
+                    title: poll.title, 
+                    desc: poll.description, 
+                    answers
+                })
+            });
 
-        //     const response = await request.json();
+            const response = await request.json();
 
-        //     if (request.status !== 201) {
-        //         setErrorPopup(response.message);
-        //         setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
-        //     } else {
-        //         setSuccessPopup(response.message);
-        //         setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
-        //         document.location.reload();
-        //     }
+            console.log(response.message);
+
+            if (request.status !== 201) {
+                setErrorPopup(response.message);
+                setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
+            } else {
+                setSuccessPopup(response.message);
+                setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
+                // document.location.reload();
+            }
         } else {
             setErrorPopup("Please fill out the poll before submitting");
             setTimeout(() => {
