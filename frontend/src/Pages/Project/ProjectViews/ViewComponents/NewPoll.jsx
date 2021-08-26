@@ -88,7 +88,7 @@ const NewPoll = ({ account, project }) => {
             setSuccessPopup(response.message);
             setTimeout(() => {
                 setSuccessPopup(false);
-                // document.location.reload();
+                document.location.reload();
             }, 5000 * 1 + 200);
         }
     }

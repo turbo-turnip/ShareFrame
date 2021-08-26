@@ -5,11 +5,11 @@ const PollPreview = ({ poll, answerPollHandler, member }) => {
     const [ responses, setResponses ] = useState(0);
 
     useEffect(() => {
-        if (poll.questions) {
+        if (poll.questions && poll.responses) {
             let questions = poll.questions,
                 responses = poll.responses;
-            setQuestions(JSON.parse(questions.replace(/\"\[/gmi, '[').replace(/\]\"/gmi, ']')));
-            setResponses(JSON.parse(responses.replace(/\"\[/gmi, '[').replace(/\]\"/gmi, ']')));
+            setQuestions(JSON.parse(questions.replace(/\"\[/gmi, '[').replace(/\]\"/gmi, ']').replace(/\\\"/gmi, '"')));
+            setResponses(JSON.parse(responses.replace(/\"\[/gmi, '[').replace(/\\\"/gmi, '"').replace(/\\\[/gmi, '[').replace(/\]\"/gmi, ']')));
         }
     }, [ poll ]);
 
@@ -24,7 +24,8 @@ const PollPreview = ({ poll, answerPollHandler, member }) => {
             <div className="bottom">
                 <span>Questions ({questions.length})</span>
                 <span>Responses ({responses.length})</span>
-                {!member && <button onClick={answerPollHandler}>Answer Poll</button>}
+                {/* Add !owner check so that only supporters can answer polls */}
+                <button onClick={answerPollHandler}>Answer Poll</button>
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ const useForceUpdate = () => {
 
 const SingleQuestion = ({ question, index, answered, setAnswered }) => {
     const forceUpdate = useForceUpdate();
-    const [ choices, setChoices ] = useState(question && question.choices && JSON.parse(question.choices).map(choice => {
+    const [ choices, setChoices ] = useState(question && question.choices && question.choices.map(choice => {
         return { selected: false, value: choice }
     }));
 

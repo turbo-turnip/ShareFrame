@@ -7,7 +7,7 @@ import { BACKEND_PATH, join } from '../../../../PATH';
 
 const Poll = ({ poll, project, account }) => {
     const questionsRef = useRef();
-    const [ answered, setAnswered ] = useState(new Array(JSON.parse(poll.questions).length).fill(false));
+    const [ answered, setAnswered ] = useState(new Array(JSON.parse(poll.questions.replace(/\"\[/gmi, '[').replace(/\]\"/gmi, ']').replace(/\\\"/gmi, '"')).length).fill(false));
     const [ questions, setQuestions ] = useState([]);
     const [ errorPopup, setErrorPopup ] = useState(false);
     const [ successPopup, setSuccessPopup ] = useState(false);
@@ -84,7 +84,7 @@ const Poll = ({ poll, project, account }) => {
 
     useEffect(() => {
         if (poll && poll.questions) 
-            setQuestions(JSON.parse(poll.questions));
+            setQuestions(JSON.parse(poll.questions.replace(/\"\[/gmi, '[').replace(/\]\"/gmi, ']').replace(/\\\"/gmi, '"')));
     }, [ poll ]);
 
     return (

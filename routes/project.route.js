@@ -529,7 +529,7 @@ router.post('/submitPollAnswer', async (req, res) => {
                     });
 
                     project.polls[pollIndex].responses = JSON.stringify(responses).replace(/\\\\/gm, '').replace(/\'/gm, "^");
-                    await db.query(`UPDATE projects SET polls = '${JSON.stringify(project.polls).replace(/\\\\/gm, '').replace(/\'/gm, "^")}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
+                    await db.query(`UPDATE projects SET polls = '${JSON.stringify(project.polls).replace(/\'/gm, "^")}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
 
                     res.status(201).json({ message: "Successfully submitted response" });
                 } else res.status(404).json({ message: "Poll not found" });
