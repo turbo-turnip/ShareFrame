@@ -1693,3 +1693,42 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 .poll-response .response-answer h4 > span {
     font-weight: bold;
 }
+
+.project-version-control {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+    position: relative;
+}
+
+.project-version-control .url-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80vw;
+}
+
+.project-version-control > a:first-of-type {
+    color: var(--light-blue);
+}
+
+.project-version-control .stats {
+    position: absolute;
+    right: 2em;
+    top: 12vh;
+    display: flex;
+    align-items: center;
+    background: var(--dark-1);
+    padding: 1em 1.2em;
+    border-radius: 12px;
+    width: 300px;
+}
+
+.project-version-control .stats > .icon svg {
+    width: 80px;
+    margin-right: 1em;
+    fill: #fff;
+    background: #000;
+    border-radius: 50%;
+}
