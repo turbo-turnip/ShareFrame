@@ -9,7 +9,7 @@ const ProjectBanner = ({ viewsCount, loading, setViewsCount, project }) => {
                 threads = project.threads.length,
                 reviews = project.reviews.length;
 
-            fetch(`https://api.github.com/repos/SoftwareFuze/ShareFrame/commits`)
+            fetch(`https://api.github.com/repos/SoftwareFuze/ShareFrame/commits?per_page=500`)
                 .then(res => res.json())
                 .then(res => {
                     setViewsCount({ supporters, members, feedback, threads, reviews, commits: res.length });

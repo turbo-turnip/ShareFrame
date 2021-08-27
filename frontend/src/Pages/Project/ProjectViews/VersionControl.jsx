@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import VersionControlUpdates from './ViewComponents/VersionControlUpdates';
 
 const VersionControl = ({ project, error }) => {
     const [ repo, setRepo ] = useState();
@@ -41,6 +42,7 @@ const VersionControl = ({ project, error }) => {
                                 <h4>Made with {repo.language}</h4>
                             </div>
                         </div>}
+                    {(repo) && <VersionControlUpdates repo={repo} />}
                 </React.Fragment>}
         </div>
     );

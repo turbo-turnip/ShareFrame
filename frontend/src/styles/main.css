@@ -1722,7 +1722,7 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     background: var(--dark-1);
     padding: 1em 1.2em;
     border-radius: 12px;
-    width: 300px;
+    width: 320px;
 }
 
 .project-version-control .stats > .icon svg {
@@ -1731,4 +1731,79 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     fill: #fff;
     background: #000;
     border-radius: 50%;
+}
+
+.version-control-updates {
+    background: var(--dark-1);
+    border-radius: 12px;
+    padding: 1em 1.5em;
+    margin-top: 1em;
+    min-height: 300px;
+}
+
+.version-control-updates .view-selection {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.version-control-updates .view-selection > button {
+    background: var(--dark-2);
+    border: none;
+    font-size: 1.2em;
+    padding: .3em .8em;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.version-control-updates .view-selection > button:hover {
+    opacity: 0.8;
+}
+
+.version-control-updates > h1:first-of-type {
+    text-align: center;
+    margin-top: .5em;
+}
+
+.version-control-updates .commit,
+.version-control-updates .pr,
+.version-control-updates .branch {
+    margin-top: 1em;
+    background: var(--dark-2);
+    max-width: max-content;
+    min-width: 400px;
+    width: 100%;
+    padding: .8em 1em;
+    border-radius: 8px;
+}
+
+.version-control-updates .commit h4:not(span),
+.version-control-updates .pr h4:not(span) {
+    font-weight: normal;
+    font-size: 1.2em;
+    margin-bottom: .4em;
+}
+
+.version-control-updates .commit a,
+.version-control-updates .pr a,
+.version-control-updates .branch a {
+    color: var(--light-blue);
+    cursor: pointer;
+}
+
+.version-control-updates .commit h4 span,
+.version-control-updates .pr h4 span {
+    font-weight: bold;
+    margin-left: 1em;
+}
+
+.version-control-updates .commit > span,
+.version-control-updates .pr > span {
+    margin-left: 1em;
+}
+
+.version-control-updates .pr > p {
+    margin-top: .5em;
 }
