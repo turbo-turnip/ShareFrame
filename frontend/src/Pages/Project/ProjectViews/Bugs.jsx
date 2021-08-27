@@ -30,6 +30,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
     const [ successPopup, setSuccessPopup ] = useState(false);
     const [ errorPopup, setErrorPopup ] = useState(false);
     const [ versions, setVersions ] = useState([]);
+    const [ member, setMember ] = useState(false);
 
     const newBugHandler = async (e) => {
         const [ title, summary, version, screenshots ] = e.target.querySelectorAll("input, select");
@@ -41,7 +42,9 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
             setNewBugPopup(false);
             setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
         } else {
-            const screenshotsBase64 = await convertFilesToBase64(screenshots.files);
+            let screenshotsBase64 = -1;
+            if (Object.keys(screenshots.files).length > 0)
+                screenshotsBase64 = await convertFilesToBase64(screenshots.files);
 
             const request = await fetch(join(BACKEND_PATH, "/project/reportBug"), {
                 method: 'POST',
@@ -55,7 +58,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
                     title: title.value,
                     summary: summary.value,
                     version: version.value,
-                    screenshots: screenshotsBase64
+                    screenshots: screenshotsBase64 !== -1 ? screenshotsBase64 : []
                 })
             });
 
@@ -87,10 +90,11 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
 
                 setVersions(announcementVersions.sort((a, b) => b.charAt(0) - a.charAt(0)));
             }
+
+            if (project.members && account)
+                project.members.forEach(member => member.user_name === account.user_name ? setMember(true) : null);
         }
     }, [ project ]);
-
-    /* fix line 103/104 bugs is undefined on new bug */
 
     return (
         <div className="project-bugs">
@@ -101,7 +105,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
             {!error && 
                 <React.Fragment>
                     <h1>Bugs{loggedIn && <button onClick={() => setNewBugPopup(true)}>Report a bug</button>}</h1>
-                    {bugs.length !== 0 ? bugs.map(bug => <Bug bug={bug} />) : <h1 className="no-bugs-message">This is where bugs will appear!</h1>}
+                    {bugs.length !== 0 ? bugs.map(bug => <Bug bug={bug} member={member} />) : <h1 className="no-bugs-message">This is where bugs will appear!</h1>}
                 </React.Fragment>}
         </div>
     );

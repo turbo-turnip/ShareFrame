@@ -1338,6 +1338,7 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 
 .project-bugs .bug details {
     margin-top: 6px;
+    width: 100%;
 }
 
 .project-bugs .bug details > img {
@@ -1345,6 +1346,7 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     margin: 1em .2em;
     border: 5px solid var(--dark-2);
     cursor: pointer;
+    max-width: 100%;
 }
 
 .project-polls {
@@ -1806,4 +1808,21 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 
 .version-control-updates .pr > p {
     margin-top: .5em;
+}
+
+.project-settings {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.bug span.solved {
+    background: var(--light-blue);
+    font-size: 1.1em;
+    border-radius: 6px;
+    padding: .3em .5em;
+    margin-top: .5em;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 10px;
 }

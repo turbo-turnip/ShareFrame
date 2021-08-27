@@ -454,7 +454,7 @@ router.post('/reportBug', async (req, res) => {
                     await db.query(`UPDATE projects SET bugs = '${JSON.stringify(project.bugs)}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
                     const newBugs = await db.query('SELECT bugs FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, projectCreator ]);
 
-                    res.status(201).json({ message: "Successfully created feedback", bugs: newBugs.rows[0].reviews });
+                    res.status(201).json({ message: "Successfully created feedback", bugs: newBugs.rows[0].bugs });
                 } else res.status(406).json({ message: "Invalid version" });
             } else res.status(404).json({ message: "Project not found" });
         } else res.status(403).json({ message: "Invalid password" });

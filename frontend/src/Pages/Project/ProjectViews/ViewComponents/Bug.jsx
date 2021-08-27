@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Bug = ({ bug }) => {
+const Bug = ({ bug, member }) => {
+    const bugSolveHandler = async () => {
+        
+    }
+
     return (
         <div className="bug">
             <div className="user">
@@ -29,6 +33,7 @@ const Bug = ({ bug }) => {
                         });
                     }} />)}
             </details>
+            {member && <span className="solved">Bug Solved</span>}
         </div>
     );
 }

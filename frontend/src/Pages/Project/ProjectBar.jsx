@@ -75,9 +75,6 @@ const ProjectBar = ({ updater, currView, project, owner }) => {
                 <div className={`option ${currView === "VersionControl" ? "curr" : ""}`} onClick={(e) => updater(e.target.innerHTML.replace(/<p>|<\/p>| /g, ''))}>
                     {<p>Version Control</p>}
                 </div> : ""}
-            <div className={`option ${currView === "Events" ? "curr" : ""}`} onClick={(e) => updater(e.target.innerHTML.replace(/<p>|<\/p>/g, ''))}>
-                {project && <p>Events</p>}
-            </div>
             {project ? owner &&
                 <div className={`option ${currView === "Settings" ? "curr" : ""}`} onClick={(e) => updater(e.target.innerHTML.replace(/<p>|<\/p>/g, ''))}>
                     {<p>Settings</p>}

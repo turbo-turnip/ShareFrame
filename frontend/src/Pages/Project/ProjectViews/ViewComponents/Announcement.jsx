@@ -118,7 +118,7 @@ const Announcement = ({ announcement, loggedIn, owner, project, username, pfp, s
             {loggedIn && 
                 <div className="buttons">
                     {project.allow_threads === 'TRUE' && <button onClick={() => setCurrView('Threads')}>Create Thread</button>}
-                    {loggedIn && <button>Report Bug</button>}
+                    {loggedIn && <button onClick={() => setCurrView('Bugs')}>Report Bug</button>}
                     {loggedIn && <button onClick={() => {
                         setNewComment(true);
 

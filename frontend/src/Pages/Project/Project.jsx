@@ -10,6 +10,7 @@ import Reviews from './ProjectViews/Reviews';
 import Bugs from './ProjectViews/Bugs';
 import Polls from './ProjectViews/Polls';
 import VersionControl from './ProjectViews/VersionControl';
+import Settings from './ProjectViews/Settings';
 
 const url = new URL(window.location.href);
 const searchParams = new URLSearchParams(url.search);
@@ -142,6 +143,12 @@ const Project = () => {
                 <VersionControl
                     project={project}
                     error={error} />
+            : ""}
+            {account ? currView === "Settings" &&
+                <Settings   
+                    project={project}
+                    error={error}
+                    account={account} />
             : ""}
             {!error && <ProjectBar updater={updateCurrViewHandler} currView={currView} project={project} owner={owner} />}
         </React.Fragment>
