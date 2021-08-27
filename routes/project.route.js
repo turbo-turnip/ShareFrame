@@ -461,6 +461,34 @@ router.post('/reportBug', async (req, res) => {
     } else res.status(403).json({ message: "Invalid user" });
 });
 
+router.post('/bugSolved', async (req, res) => {
+    const { username, pfp, projectCreator, projectTitle, title, summary, version } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, projectCreator ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ username, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        if (exists.rows.length > 0) {
+            const project = exists.rows[0];
+
+            if (project.bugs) {
+                let index = -1;
+                project.bugs.forEach((bug, i) => {
+                    if (bug.user === username && bug.title === title && bug.summary === summary && bug.version == version) {
+                        index = i;
+                    }
+                });
+
+                if (index > -1) {
+                    project.bugs.splice(index, 1);
+                    const bugs = await db.query(`UPDATE projects SET bugs = '${JSON.stringify(project.bugs)}' WHERE project_title = $1 AND user_name = $2 RETURNING bugs`, [ projectTitle, projectCreator ]);
+                    res.status(200).json({ message: "Successfully solved bug", bugs: bugs.rows[0].bugs });
+                } else res.status(404).json({ message: "Bug not found" });
+            } else res.status(404).json({ message: "Bug not found" });
+        } else res.status(404).json({ message: "Project not found" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
 router.post('/createPoll', async (req, res) => {
     const { username, pfp, projectCreator, password, projectTitle, title, desc, questions } = req.body;
 

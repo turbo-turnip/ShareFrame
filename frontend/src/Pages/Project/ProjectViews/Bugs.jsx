@@ -105,7 +105,7 @@ const Reviews = ({ error, project, owner, loggedIn, account }) => {
             {!error && 
                 <React.Fragment>
                     <h1>Bugs{loggedIn && <button onClick={() => setNewBugPopup(true)}>Report a bug</button>}</h1>
-                    {bugs.length !== 0 ? bugs.map(bug => <Bug bug={bug} member={member} />) : <h1 className="no-bugs-message">This is where bugs will appear!</h1>}
+                    {bugs.length !== 0 ? bugs.map(bug => <Bug bug={bug} member={member} project={project} account={account} setBugs={setBugs} />) : <h1 className="no-bugs-message">This is where bugs will appear!</h1>}
                 </React.Fragment>}
         </div>
     );
