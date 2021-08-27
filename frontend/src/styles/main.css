@@ -693,7 +693,6 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     align-items: flex-start;
     justify-content: center;
     margin-bottom: 50px;
-    /* box-shadow: 0 3px 6px 2px #0005; */
     background: var(--dark-1);
     padding: 1em 1.2em;
     border-radius: 12px;
@@ -1825,4 +1824,51 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     position: absolute;
     top: 0;
     right: 10px;
+}
+
+.project-settings input {
+    max-width: 600px;
+}
+
+.project-settings .project-member {
+    background: var(--dark-1);
+    display: flex;
+    align-items: center;
+    padding: .5em;
+    border-radius: 8px;
+    margin: .5em;
+    margin-left: 0em;
+    gap: 1em;
+}
+
+.project-settings .project-member img {
+    height: 30px;
+}
+
+.project-settings .project-member > button {
+    font-size: 1.1em;
+    background: rgb(228, 72, 72);
+    border: none;
+    padding: .2em .4em;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.project-settings > button:last-of-type {
+    background: rgb(228, 72, 72);
+    border: none;
+    font-size: 1.2em;
+    padding: .3em .8em;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 5em;
+}
+
+.project-settings .project-member + button {
+    background: var(--light-blue);
+    font-size: 1.1em;
+    padding: .3em .6em;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
 }
