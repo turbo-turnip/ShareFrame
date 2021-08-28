@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Popup from '../../../Components/Popup';
-import { BACKEND_PATH, join } from '../../../PATH';
+import { BACKEND_PATH, FRONTEND_PATH, join } from '../../../PATH';
 
 const Settings = ({ project, account, error }) => { 
     const [ errorPopup, setErrorPopup ] = useState(false);
     const [ successPopup, setSuccessPopup ] = useState(false);
     const [ members, setMembers ] = useState(project && project.members ? project.members : []);
+    const [ changed, setChanged ] = useState([ false, false, false, false, false, false, false, false, false ]);
 
     const removeMemberHandler = async (member) => {
         if (window.confirm('Are you sure you want to remove ' + member.user_name + ' from this project?')) {
@@ -68,9 +69,81 @@ const Settings = ({ project, account, error }) => {
         }
     }
 
+    const projectDeleteHandler = async () => {
+        if (window.confirm('Are you sure you want to delete this project? You can\'t un-delete it!')) {
+            const password = prompt('To delete this project, enter your user password', '');
+
+            const request = await fetch(join(BACKEND_PATH, "/project/deleteProject"), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    projectTitle: project.project_title,
+                    projectCreator: account.user_name,
+                    password
+                })
+            });
+
+            const response = await request.json();
+
+            if (request.status !== 200) {
+                setErrorPopup(response.message);
+                setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
+            } else {
+                setSuccessPopup(response.message);
+                setTimeout(() => {
+                    setSuccessPopup(false)
+                    document.location.href = join(FRONTEND_PATH, "/");
+                }, 5000 * 1 + 200);
+            }
+        }
+    }
+
+    const saveSettingsHandler = async () => {
+        const request = await fetch(join(BACKEND_PATH, "/project/submitSettings"), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: changed[0],
+                desc: changed[1], 
+                shortDesc: changed[2], 
+                allFeedback: changed[3],
+                allReviews: changed[4],
+                allThreads: changed[5], 
+                vc: changed[6],
+                vcOwner: changed[7], 
+                vcName: changed[8], 
+                oldTitle: project.project_title, 
+                username: account.user_name
+            })
+        });
+
+        const response = await request.json();
+
+        console.log(response);
+    }
+
+    const inputChangeHandler = (index, e) => {
+        if (e.target.type === "checkbox") {
+            if (changed[index] !== e.target.checked) {
+                setChanged(prevState =>
+                    prevState.map((c, i) =>
+                        i === index ? e.target.checked.toString().toUpperCase() : c));
+            }
+        } else if (e.target.type === "text") {
+            if (changed[index] !== e.target.value) {
+                setChanged(prevState =>
+                    prevState.map((c, i) =>
+                        i === index ? e.target.value : c));
+            }
+        }
+    }
+
     useEffect(() => {
-        if (project)
+        if (project) {
             setMembers(project.members);
+
+            setChanged([ project.project_title, project.project_desc, project.project_desc_short, project.allow_feedback, project.allow_reviews, project.allow_threads, project.version_control, project.version_control === 'TRUE' ? project.repo_username : "", project.version_control === 'TRUE' ? project.repo_title : "" ]);
+        }
     }, [ project ]);
 
     return (
@@ -83,39 +156,39 @@ const Settings = ({ project, account, error }) => {
                     <h1>Project Settings</h1>
                     <div className="input-field">
                         <label>Project Title</label>
-                        <input type="text" value={project.project_title} />
+                        <input type="text" maxLength="25" defaultValue={project.project_title} onChange={(e) => inputChangeHandler(0, e)} />
                     </div>
                     <div className="input-field">
                         <label>Project Description</label>
-                        <input type="text" value={project.project_desc} />
+                        <input type="text" defaultValue={project.project_desc} onChange={(e) => inputChangeHandler(1, e)} />
                     </div>
                     <div className="input-field">
                         <label>Project Short Description</label>
-                        <input type="text" value={project.project_desc_short} />
+                        <input type="text" defaultValue={project.project_desc_short} onChange={(e) => inputChangeHandler(2, e)} />
                     </div>
                     <div className="input-field">
                         <label>Allow Feedback</label>
-                        <input type="checkbox" checked={project.allow_feedback === 'TRUE'} />
+                        <input type="checkbox" defaultChecked={project.allow_feedback === 'TRUE'} onChange={(e) => inputChangeHandler(3, e)} />
                     </div>
                     <div className="input-field">
                         <label>Allow Reviews</label>
-                        <input type="checkbox" checked={project.allow_reviews === 'TRUE'} />
+                        <input type="checkbox" defaultChecked={project.allow_reviews === 'TRUE'} onChange={(e) => inputChangeHandler(4, e)} />
                     </div>
                     <div className="input-field">
                         <label>Allow Threads</label>
-                        <input type="checkbox" checked={project.allow_threads === 'TRUE'} />
+                        <input type="checkbox" defaultChecked={project.allow_threads === 'TRUE'} onChange={(e) => inputChangeHandler(5, e)} />
                     </div>
                     <div className="input-field">
                         <label>GitHub Version Control</label>
-                        <input type="checkbox" checked={project.version_control === 'TRUE'} />
+                        <input type="checkbox" defaultChecked={project.version_control === 'TRUE'} onChange={(e) => inputChangeHandler(6, e)} />
                     </div>
                     <div className="input-field">
                         <label>GitHub Repository Owner</label>
-                        <input type="text" value={project.version_control === 'TRUE' && project.repo_username} />
+                        <input type="text" defaultValue={project.version_control === 'TRUE' ? project.repo_username : ""} onChange={(e) => inputChangeHandler(7, e)} />
                     </div>
                     <div className="input-field">
                         <label>GitHub Repository Name</label>
-                        <input type="text" value={project.version_control === 'TRUE' && project.repo_title} />
+                        <input type="text" defaultValue={project.version_control === 'TRUE' ? project.repo_title : ""} onChange={(e) => inputChangeHandler(8, e)} />
                     </div>
                     <div className="input-field">
                         <label>Members</label>
@@ -127,7 +200,8 @@ const Settings = ({ project, account, error }) => {
                             </div>)}
                         <button onClick={addMemberHandler}>Add Member</button>
                     </div>
-                    <button>Delete Project</button>
+                    <button onClick={saveSettingsHandler}>Save Settings</button>
+                    <button onClick={projectDeleteHandler}>Delete Project</button>
                 </React.Fragment>}
         </div>
     );

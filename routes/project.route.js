@@ -645,8 +645,8 @@ router.post('/acceptInvite', async (req, res) => {
         const project = exists.rows[0];
 
         if (userExists.rows.length > 0) {
-            try {
-                userExists.rows.forEach(async (user, i) => {
+            userExists.rows.forEach(async (user, i) => {
+                if (!res.headersSent) {
                     const passwordCorrect = await bcrypt.compare(password, user.user_pass);
                     if (passwordCorrect) {
                         if (project.members) {
@@ -658,11 +658,82 @@ router.post('/acceptInvite', async (req, res) => {
                         await db.query(`UPDATE projects SET members = '${JSON.stringify(project.members)}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, owner ]);
 
                         res.status(200).json({ message: "Successfully accepted invite" });
-                        throw BreakException;
                     }
-                });
-            } catch (err) {} 
+                }
+            });
         } else res.status(404).json({ message: "Invalid invite link" });
+    } else res.status(404).json({ message: "Project not found" });
+});
+
+router.post('/deleteProject', async (req, res) => {
+    const { projectTitle, projectCreator, password } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, projectCreator ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1', [ projectCreator ]);
+
+    if (exists.rows.length > 0) {
+        const project = exists.rows[0];
+
+        if (userExists.rows.length > 0) {
+            userExists.rows.forEach(async (user) => {
+                if (!res.headersSent) {
+                    const passwordCorrect = await bcrypt.compare(password, user.user_pass);
+
+                    if (passwordCorrect) {
+                        await db.query('DELETE FROM projects WHERE project_title = $1 AND user_name = $2', [ project.project_title, project.user_name ]);
+
+                        res.status(200).json({ message: "Successfully removed project" });
+                    }
+                }
+            });
+        } else res.status(404).json({ message: "Invalid password" });
+    } else res.status(404).json({ message: "Project not found" });
+});
+
+router.post('/submitSettings', async (req, res) => {
+    const { title, desc, shortDesc, allFeedback, allReviews, allThreads, vc, vcOwner, vcName, oldTitle, username } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ oldTitle, username ]);
+
+    if (exists.rows.length > 0) {
+        const project = exists.rows[0];
+
+        if (project.project_title !== title) project.project_title = title;
+        
+        if (project.project_desc !== desc) project.project_desc = desc;
+        
+        if (project.project_desc_short !== shortDesc) project.project_desc_short = shortDesc;
+        
+        if (project.allow_feedback !== allFeedback) project.allow_feedback = allFeedback;
+        
+        if (project.allow_reviews !== allReviews) project.allow_reviews = allReviews;
+        
+        if (project.allow_threads !== allThreads) project.allow_threads = allThreads;
+        
+        if (project.version_control !== vc) project.version_control = vc;
+        
+        if (project.repo_username !== vcOwner) project.repo_username = vcOwner;
+        
+        if (project.repo_title !== vcName) project.repo_title = vcName;
+        
+
+        console.log(project);
+
+        await db.query(`
+            UPDATE projects SET
+                project_title = $1,
+                project_desc = $2,
+                project_desc_short = $3,
+                allow_feedback = $4,
+                allow_reviews = $5,
+                allow_threads = $6,
+                version_control = $7,
+                repo_username = $8,
+                repo_title = $9
+            WHERE project_id = $10
+        `, [ project.project_title, project.project_desc, project.project_desc_short, project.allow_feedback, project.allow_reviews, project.allow_threads, project.version_control, project.repo_username, project.repo_title, project.project_id ])
+
+        res.status(200).json({ message: "Updated settings" });
     } else res.status(404).json({ message: "Project not found" });
 });
 

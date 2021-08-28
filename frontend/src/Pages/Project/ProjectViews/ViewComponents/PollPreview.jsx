@@ -25,7 +25,7 @@ const PollPreview = ({ poll, answerPollHandler, member, viewResponsesHandler }) 
                 <span>Questions ({questions.length})</span>
                 <span>Responses ({responses.length})</span>
                 {member && <button onClick={answerPollHandler}>Answer Poll</button>}
-                {!member && <button onClick={viewResponsesHandler}>View Responses</button>}
+                {member && <button onClick={viewResponsesHandler}>View Responses</button>}
             </div>
         </div>
     );

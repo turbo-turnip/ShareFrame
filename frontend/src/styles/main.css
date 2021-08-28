@@ -1856,6 +1856,15 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 
 .project-settings > button:last-of-type {
     background: rgb(228, 72, 72);
+    margin-left: 1em;
+}
+
+.project-settings > button:first-of-type {
+    background: var(--light-blue);
+}
+
+.project-settings > button:last-of-type,
+.project-settings > button:first-of-type {
     border: none;
     font-size: 1.2em;
     padding: .3em .8em;
