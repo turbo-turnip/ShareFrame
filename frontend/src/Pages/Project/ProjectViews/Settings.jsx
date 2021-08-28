@@ -9,18 +9,49 @@ const Settings = ({ project, account, error }) => {
 
     const removeMemberHandler = async (member) => {
         if (window.confirm('Are you sure you want to remove ' + member.user_name + ' from this project?')) {
-            // if (member.user_name === project.user_name) {
-            //     setErrorPopup("You can't remove that member because they are the owner of this project");
-            //     setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
-            // }
-            const request = await fetch(join(BACKEND_PATH, "/project/removeMember"), {
+            if (member.user_name === project.user_name) {
+                setErrorPopup("You can't remove that member because they are the owner of this project");
+                setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
+            } else {
+                const request = await fetch(join(BACKEND_PATH, "/project/removeMember"), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: account.user_name, 
+                        pfp: account.pfp, 
+                        removedUser: member.user_name, 
+                        removedPfp: member.pfp, 
+                        projectTitle: project.project_title
+                    })
+                });
+
+                const response = await request.json();
+
+                if (request.status !== 200) {
+                    setErrorPopup(response.message);
+                    setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
+                } else {
+                    setSuccessPopup(response.message);
+                    setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
+                    setMembers(response.members);
+                }
+            }
+        }
+    }
+
+    const addMemberHandler = async (member) => {  
+        const username = prompt('Please enter the member\'s username');
+        const email = prompt('Please enter the member\'s email');
+
+        if (username && email) {
+            const request = await fetch(join(BACKEND_PATH, "/project/addMember"), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     username: account.user_name, 
                     pfp: account.pfp, 
-                    removedUser: member.user_name, 
-                    removedPfp: member.pfp, 
+                    addedUser: username, 
+                    addedEmail: email, 
                     projectTitle: project.project_title
                 })
             });
@@ -33,7 +64,6 @@ const Settings = ({ project, account, error }) => {
             } else {
                 setSuccessPopup(response.message);
                 setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
-                setMembers(response.members);
             }
         }
     }
@@ -95,7 +125,7 @@ const Settings = ({ project, account, error }) => {
                                 <h4>{member.user_name}</h4>    
                                 <button onClick={() => removeMemberHandler(member)}>Remove Member</button>
                             </div>)}
-                        <button>Add Member</button>
+                        <button onClick={addMemberHandler}>Add Member</button>
                     </div>
                     <button>Delete Project</button>
                 </React.Fragment>}
