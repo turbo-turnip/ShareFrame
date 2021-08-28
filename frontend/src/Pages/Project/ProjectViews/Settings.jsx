@@ -119,7 +119,16 @@ const Settings = ({ project, account, error }) => {
 
         const response = await request.json();
 
-        console.log(response);
+        if (request.status !== 200) {
+            setErrorPopup(response.message);
+            setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
+        } else {
+            setSuccessPopup(response.message);
+            setTimeout(() => {
+                setSuccessPopup(false)
+                document.location.href = join(FRONTEND_PATH, "/project?name=" + encodeURIComponent(changed[0]) + "&user=" + encodeURIComponent(account.user_name));
+            }, 5000 * 1 + 200);
+        }
     }
 
     const inputChangeHandler = (index, e) => {
@@ -145,6 +154,10 @@ const Settings = ({ project, account, error }) => {
             setChanged([ project.project_title, project.project_desc, project.project_desc_short, project.allow_feedback, project.allow_reviews, project.allow_threads, project.version_control, project.version_control === 'TRUE' ? project.repo_username : "", project.version_control === 'TRUE' ? project.repo_title : "" ]);
         }
     }, [ project ]);
+
+    useEffect(() => {
+        window.onbeforeunload = e => e.returnValue = " ";
+    }, []);
 
     return (
         <div className="project-settings">
