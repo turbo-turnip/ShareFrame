@@ -699,25 +699,22 @@ router.post('/submitSettings', async (req, res) => {
         const project = exists.rows[0];
 
         if (project.project_title !== title) project.project_title = title;
-        
-        if (project.project_desc !== desc) project.project_desc = desc;
-        
-        if (project.project_desc_short !== shortDesc) project.project_desc_short = shortDesc;
-        
-        if (project.allow_feedback !== allFeedback) project.allow_feedback = allFeedback;
-        
-        if (project.allow_reviews !== allReviews) project.allow_reviews = allReviews;
-        
-        if (project.allow_threads !== allThreads) project.allow_threads = allThreads;
-        
-        if (project.version_control !== vc) project.version_control = vc;
-        
-        if (project.repo_username !== vcOwner) project.repo_username = vcOwner;
-        
-        if (project.repo_title !== vcName) project.repo_title = vcName;
-        
 
-        console.log(project);
+        if (project.project_desc !== desc) project.project_desc = desc;
+
+        if (project.project_desc_short !== shortDesc) project.project_desc_short = shortDesc;
+
+        if (project.allow_feedback !== allFeedback) project.allow_feedback = allFeedback;
+
+        if (project.allow_reviews !== allReviews) project.allow_reviews = allReviews;
+
+        if (project.allow_threads !== allThreads) project.allow_threads = allThreads;
+
+        if (project.version_control !== vc) project.version_control = vc;
+
+        if (project.repo_username !== vcOwner) project.repo_username = vcOwner;
+
+        if (project.repo_title !== vcName) project.repo_title = vcName;
 
         await db.query(`
             UPDATE projects SET
@@ -735,6 +732,52 @@ router.post('/submitSettings', async (req, res) => {
 
         res.status(200).json({ message: "Updated settings" });
     } else res.status(404).json({ message: "Project not found" });
+});
+
+router.post('/support', async (req, res) => {
+    const { username, pfp, projectCreator, projectTitle } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, projectCreator ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ username, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        if (exists.rows.length > 0) {
+            const project = exists.rows[0];
+
+            if (!project.supporters) 
+                project.supporters = [ { user: username, pfp } ];
+            else 
+                project.supporters.unshift({ user: username, pfp });
+
+            await db.query(`UPDATE projects SET supporters = '${JSON.stringify(project.supporters)}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
+
+            res.status(201).json({ message: "Supporting " + project.project_title });
+        } else res.status(404).json({ message: "Project not found" });
+    } else res.status(403).json({ message: "Invalid user" });
+});
+
+router.post('/removeSupport', async (req, res) => {
+    const { username, pfp, projectCreator, projectTitle } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, projectCreator ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND pfp = $2', [ username, pfp ]);
+
+    if (userExists.rows.length > 0) {
+        if (exists.rows.length > 0) {
+            const project = exists.rows[0];
+            let index = -1;
+
+            project.supporters.forEach((supporter, i) => supporter.user === username && supporter.pfp === pfp ? index = i : null);
+
+            if (index > -1) {
+                project.supporters.splice(index, 1);
+
+                await db.query(`UPDATE projects SET supporters = '${JSON.stringify(project.supporters)}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, projectCreator ]);
+
+                res.status(201).json({ message: "Removed support from " + project.project_title });
+            } else res.status(418).json({ message: "You aren't supporting this project" });
+        } else res.status(404).json({ message: "Project not found" });
+    } else res.status(403).json({ message: "Invalid user" });
 });
 
 module.exports = router;

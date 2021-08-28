@@ -8,7 +8,7 @@ const Page = ({ error, viewsCount, loading, setViewsCount, project, owner, logge
             {error && <h1 className="url-error">{error}</h1>}
             {!error && 
                 <React.Fragment>
-                    <ProjectBanner viewsCount={viewsCount} loading={loading} setViewsCount={setViewsCount} project={project} />
+                    <ProjectBanner viewsCount={viewsCount} loading={loading} setViewsCount={setViewsCount} project={project} account={account} loggedIn={loggedIn} />
                     <ProjectPane setCurrView={setCurrView} project={project} owner={owner} loggedIn={loggedIn} account={account} />
                 </React.Fragment>
             }

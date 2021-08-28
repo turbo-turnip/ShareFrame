@@ -547,6 +547,18 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     z-index: 2;
 }
 
+.project-page > .project-banner button.support {
+    background: var(--dark-2);
+    font-family: 'Lato';
+    font-size: 1.5em;
+    position: absolute;
+    right: 100px;
+    padding: .3em 1em;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
 .project-page .project-banner > img {
     position: absolute;
     height: 100%;
