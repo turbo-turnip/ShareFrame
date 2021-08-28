@@ -1,8 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Popup from '../../../Components/Popup';
+import { BACKEND_PATH, join } from '../../../PATH';
 
-const Settings = ({ project, account, error }) => {
+const Settings = ({ project, account, error }) => { 
+    const [ errorPopup, setErrorPopup ] = useState(false);
+    const [ successPopup, setSuccessPopup ] = useState(false);
+    const [ members, setMembers ] = useState(project && project.members ? project.members : []);
+
+    const removeMemberHandler = async (member) => {
+        if (window.confirm('Are you sure you want to remove ' + member.user_name + ' from this project?')) {
+            // if (member.user_name === project.user_name) {
+            //     setErrorPopup("You can't remove that member because they are the owner of this project");
+            //     setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
+            // }
+            const request = await fetch(join(BACKEND_PATH, "/project/removeMember"), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: account.user_name, 
+                    pfp: account.pfp, 
+                    removedUser: member.user_name, 
+                    removedPfp: member.pfp, 
+                    projectTitle: project.project_title
+                })
+            });
+
+            const response = await request.json();
+
+            if (request.status !== 200) {
+                setErrorPopup(response.message);
+                setTimeout(() => setErrorPopup(false), 5000 * 1 + 200);
+            } else {
+                setSuccessPopup(response.message);
+                setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
+                setMembers(response.members);
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (project)
+            setMembers(project.members);
+    }, [ project ]);
+
     return (
         <div className="project-settings">
+            {errorPopup && <Popup type="error" message={errorPopup} />}
+            {successPopup && <Popup type="success" message={successPopup} />}
             {error && <h1 className="url-error">{error}</h1>}
             {!error &&
                 <React.Fragment>
@@ -45,11 +89,11 @@ const Settings = ({ project, account, error }) => {
                     </div>
                     <div className="input-field">
                         <label>Members</label>
-                        {project.members.map(member =>
+                        {members.map(member =>
                             <div className="project-member">
                                 <img src={member.pfp} alt={member.user_name} />
                                 <h4>{member.user_name}</h4>    
-                                <button>Remove Member</button>
+                                <button onClick={() => removeMemberHandler(member)}>Remove Member</button>
                             </div>)}
                         <button>Add Member</button>
                     </div>

@@ -566,4 +566,29 @@ router.post('/submitPollAnswer', async (req, res) => {
     } else res.status(403).json({ message: "Invalid user" });
 });
 
+router.post('/removeMember', async (req, res) => {
+    const { username, pfp, removedUser, removedPfp, projectTitle } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, username ]);
+
+    if (exists.rows.length > 0) {
+        if (exists.rows[0].user_name === username && exists.rows[0].user_pfp === pfp) {
+            const project = exists.rows[0];
+            let memberIndex = -1;
+
+            project.members.forEach((member, i) => {
+                if (member.user_name === removedUser && member.pfp === removedPfp)
+                    memberIndex = i;
+            });
+
+            if (memberIndex > -1) {
+                project.members.splice(memberIndex, 1);
+
+                const members = await db.query(`UPDATE projects SET members = '${JSON.stringify(project.members)}' WHERE project_title = $1 AND user_name = $2 RETURNING members`, [ projectTitle, username ]);
+                res.status(200).json({ message: "Successfully removed member", members: members.rows[0].members });
+            } else res.status(404).json({ message: "That member is non-existent" });
+        } else res.status(403).json({ message: "Unauthorized" });
+    } else res.status(404).json({ message: "Project not found" });
+});
+
 module.exports = router;

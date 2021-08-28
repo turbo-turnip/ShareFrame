@@ -1864,7 +1864,7 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     margin-top: 5em;
 }
 
-.project-settings .project-member + button {
+.project-settings .input-field:last-of-type > button {
     background: var(--light-blue);
     font-size: 1.1em;
     padding: .3em .6em;
