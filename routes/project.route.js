@@ -603,30 +603,66 @@ router.post('/addMember', async (req, res) => {
             const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND user_email = $2', [ addedUser, addedEmail ]);
 
             if (userExists.rows.length > 0) {
-                const user = userExists.rows[0];
-                const acceptInvitePath = 
-                    "http://localhost:3000/accept-invite?project="
-                    + encodeURIComponent(projectTitle)
-                    + "&owner="
-                    + encodeURIComponent(username)
-                    + "&addeduser="
-                    + encodeURIComponent(addedUser);
+                let found = false;
+                project.members.forEach(member => member.user_name === userExists.rows[0].user_name ? found = true : null);
 
-                email({
-                    to: user.user_email,
-                    from: process.env.BOT_EMAIL,
-                    subject: `${username} invited you to ${projectTitle} on ShareFrame!`,
-                    html: `
-                        <h1>Hey, ${addedUser}<h1>
-                        <h3>${username} invited you to become a member for their project, ${projectTitle}!</h3>
-                        <a href="${acceptInvitePath}">Click here to accept the invite!</a>
-                    `
-                })
-                    .then(res => console.log(res));
+                if (!found) {
+                    const user = userExists.rows[0];
+                    const acceptInvitePath = 
+                        "http://localhost:3000/accept-invite?project="
+                        + encodeURIComponent(projectTitle)
+                        + "&owner="
+                        + encodeURIComponent(username)
+                        + "&addeduser="
+                        + encodeURIComponent(addedUser);
 
-                res.status(200).json({ message: "Invited " + addedUser });
+                    email({
+                        to: user.user_email,
+                        from: process.env.BOT_EMAIL,
+                        subject: `${username} invited you to ${projectTitle} on ShareFrame!`,
+                        html: `
+                            <h1>Hey, ${addedUser}<h1>
+                            <h3>${username} invited you to become a member for their project, ${projectTitle}!</h3>
+                            <a href="${acceptInvitePath}">Click here to accept the invite!</a>
+                        `
+                    })
+                        .then(res => console.log(res));
+
+                    res.status(200).json({ message: "Invited " + addedUser });
+                } else res.status(409).json({ message: "That user is already a member" });
             } else res.status(404).json({ message: "Invalid username and email" });
         } else res.status(403).json({ message: "Unauthorized" });
+    } else res.status(404).json({ message: "Project not found" });
+});
+
+router.post('/acceptInvite', async (req, res) => {
+    const { password, addedUser, owner, projectTitle } = req.body;
+
+    const exists = await db.query('SELECT * FROM projects WHERE project_title = $1 AND user_name = $2', [ projectTitle, owner ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1', [ addedUser ]);
+
+    if (exists.rows.length > 0) {
+        const project = exists.rows[0];
+
+        if (userExists.rows.length > 0) {
+            try {
+                userExists.rows.forEach(async (user, i) => {
+                    const passwordCorrect = await bcrypt.compare(password, user.user_pass);
+                    if (passwordCorrect) {
+                        if (project.members) {
+                            project.members.unshift({ user_name: user.user_name, pfp: user.pfp });
+                        } else {
+                            project.members = [ { user_name: user.user_name, pfp: user.pfp } ];
+                        }
+
+                        await db.query(`UPDATE projects SET members = '${JSON.stringify(project.members)}' WHERE project_title = $1 AND user_name = $2`, [ projectTitle, owner ]);
+
+                        res.status(200).json({ message: "Successfully accepted invite" });
+                        throw BreakException;
+                    }
+                });
+            } catch (err) {} 
+        } else res.status(404).json({ message: "Invalid invite link" });
     } else res.status(404).json({ message: "Project not found" });
 });
 

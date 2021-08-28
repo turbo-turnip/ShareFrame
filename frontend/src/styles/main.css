@@ -1872,3 +1872,10 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     border: none;
     cursor: pointer;
 }
+
+.success {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
