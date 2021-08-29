@@ -9,6 +9,7 @@ import Create from './Pages/Create/Create';
 import Project from './Pages/Project/Project';
 import ThreadPage from './Pages/Project/ProjectViews/ThreadPage';
 import AcceptInvite from './Pages/AcceptInvite';
+import Account from './Pages/Account/Account';
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                 <Route exact path="/project" component={Project} />
                 <Route exact path="/project/thread" component={ThreadPage} />
                 <Route exact path="/accept-invite" component={AcceptInvite} />
+                <Route exact path="/account" component={Account} />
             </Switch>
         </BrowserRouter>
     );

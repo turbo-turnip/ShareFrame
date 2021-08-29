@@ -1900,3 +1900,36 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+.account-page {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.account-page > .input-field {
+    max-width: 600px;
+}
+
+.account-page > .input-field.pfp {
+    width: max-content;
+}
+
+.account-page > .input-field > div {
+    display: flex;
+    align-items: center;
+}
+
+.account-page > .input-field.pfp > div img {
+    height: 30px;
+    margin-right: .5em;
+}
+
+.account-page > .input-field > div button {
+    font-size: 1.2em;
+    background: var(--light-blue);
+    padding: .2em .6em;
+    border-radius: 6px;
+    border: none;
+    margin-left: .5em;
+    cursor: pointer;
+}
