@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Commits = ({ repo }) => {
+const Commits = ({ repo, setCount }) => {
     const [ commits, setCommits ] = useState([]);
     const [ error, setError ] = useState(false);
 
@@ -18,9 +18,12 @@ const Commits = ({ repo }) => {
 
             if (request.status !== 200)
                 setError(true);
-            else 
-                setCommits(response);
-
+            else {
+                setCommits(response); 
+                setCount(prevState => 
+                    prevState.map((c, i) => 
+                        i === 0 ? response.length : c));
+            }
         }
 
         fetchCommits();

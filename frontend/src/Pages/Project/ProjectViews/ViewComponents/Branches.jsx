@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Branches = ({ repo }) => {
+const Branches = ({ repo, setCount }) => {
     const [ branches, setBranches ] = useState([]);
     const [ error, setError ] = useState(false);
 
@@ -18,8 +18,12 @@ const Branches = ({ repo }) => {
 
             if (request.status !== 200)
                 setError(true);
-            else 
+            else {
                 setBranches(response);
+                setCount(prevState => 
+                    prevState.map((c, i) => 
+                        i === 2 ? response.length : c));
+            }
 
         }
 

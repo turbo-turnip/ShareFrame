@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Pulls = ({ repo }) => {
+const Pulls = ({ repo, setCount }) => {
     const [ pulls, setPulls ] = useState([]);
     const [ error, setError ] = useState(false);
 
@@ -18,8 +18,12 @@ const Pulls = ({ repo }) => {
 
             if (request.status !== 200)
                 setError(true);
-            else 
+            else {
                 setPulls(response);
+                setCount(prevState => 
+                    prevState.map((c, i) => 
+                        i === 1 ? response.length : c));
+            }
 
         }
 
