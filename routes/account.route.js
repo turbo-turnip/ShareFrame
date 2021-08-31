@@ -278,4 +278,25 @@ router.post('/updatePfp', async (req, res) => {
     } else res.status(404).json({ message: "User doesn't exist" });
 });
 
+router.post('/updatePassword', async (req, res) => {
+    const { username, password, newPassword } = req.body;
+
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1', [ username ]);
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    if (userExists.rows.length > 0) {
+        userExists.rows.forEach(async (user, iteration) => {
+            const passwordCorrect = await bcrypt.compare(password, user.user_pass);
+
+            if (passwordCorrect && !res.headersSent) {
+                await db.query('UPDATE users SET user_pass = $1 WHERE user_name = $2 AND user_email = $3 AND user_id = $4', [ hashed, username, user.user_email, user.user_id ]);
+                
+                res.status(200).json({ message: "Updated password" });
+            } else if (iteration === userExists.rows.length - 1 && !res.headersSent) {
+                res.status(403).json({ message: "Invalid password" });
+            }
+        });
+    } else res.status(404).json({ message: "User doesn't exist" });
+});
+
 module.exports = router;
