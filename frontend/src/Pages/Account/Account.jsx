@@ -3,7 +3,6 @@ import Nav from '../../Components/Nav';
 import isLoggedIn from '../../IsLoggedIn';
 import { FRONTEND_PATH, join } from '../../PATH';
 import Username from './Username';
-import Email from './Email';
 import Profile from './Profile';
 import Password from './Password';
 
@@ -27,7 +26,6 @@ const Account = () => {
             {account && 
                 <div className="account-page">
                     <Username account={account} />
-                    <Email account={account} />
                     <Profile account={account} />
                     <Password account={account} />
                 </div>}
