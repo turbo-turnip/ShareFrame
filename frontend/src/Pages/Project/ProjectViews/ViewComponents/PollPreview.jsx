@@ -15,6 +15,7 @@ const PollPreview = ({ poll, answerPollHandler, member, viewResponsesHandler }) 
 
     return (
         <div className="poll-preview">
+            {console.log(poll)}
             <div className="user">
                 <img src={poll.pfp} alt={poll.creator} />
                 <h4>{poll.creator}</h4>

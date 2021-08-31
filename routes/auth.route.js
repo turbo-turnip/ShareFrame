@@ -80,7 +80,7 @@ router.post('/register', async (req, res) => {
         return;
     }
 
-    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 AND user_email = $2', [ username, email ]);
+    const userExists = await db.query('SELECT * FROM users WHERE user_name = $1 OR user_email = $2', [ username, email ]);
     if (!userExists.rows.length > 0) {
         try {
             const hashed = await bcrypt.hash(password, 10);

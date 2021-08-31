@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const authRouter = require('./routes/auth.route');
 const projectRouter = require('./routes/project.route');
+const accountRouter = require('./routes/account.route');
 const WebSocket = require('ws');
 const { pool: db } = require('./database');
 
@@ -20,6 +21,7 @@ app.use(express.json({ limit: '100mb' }));
 
 app.use('/auth', authRouter);
 app.use('/project', projectRouter);
+app.use('/account', accountRouter);
 
 // main ReST API
 app.get('/', (req, res) => {
