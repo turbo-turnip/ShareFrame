@@ -1,6 +1,7 @@
 const Router = require('express').Router;
 const { pool: db } = require('../database');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 const router = new Router();
@@ -132,7 +133,10 @@ router.post('/updateUsername', async (req, res) => {
                             }
                         });
 
-                        res.status(200).json({ message: "Updated username" });
+                        const at = await jwt.sign({ username: newUsername, email: user.user_email, password: user.user_pass }, process.env.AT_SECRET, { expiresIn: 60 * 15 });
+                        const rt = await jwt.sign({ id: user.user_id, password: user.user_pass }, process.env.RT_SECRET, { expiresIn: 60 * 60 * 24 * 30 });
+
+                        res.status(200).json({ message: "Updated username", at, rt });
                     } catch (err) {
                         res.status(500).json({ message: err.message });
                         console.log(err);
@@ -266,7 +270,10 @@ router.post('/updatePfp', async (req, res) => {
                         }
                     });
 
-                    res.status(200).json({ message: "Updated profile picture" });
+                    const at = await jwt.sign({ username: user.user_name, email: user.user_email, password: user.user_pass }, process.env.AT_SECRET, { expiresIn: 60 * 15 });
+                    const rt = await jwt.sign({ id: user.user_id, password: user.user_pass }, process.env.RT_SECRET, { expiresIn: 60 * 60 * 24 * 30 });
+
+                    res.status(200).json({ message: "Updated profile picture", at, rt });
                 } catch (err) {
                     res.status(500).json({ message: err.message });
                     console.log(err);
@@ -291,6 +298,10 @@ router.post('/updatePassword', async (req, res) => {
             if (passwordCorrect && !res.headersSent) {
                 await db.query('UPDATE users SET user_pass = $1 WHERE user_name = $2 AND user_email = $3 AND user_id = $4', [ hashed, username, user.user_email, user.user_id ]);
                 
+
+                const at = await jwt.sign({ username: user.user_name, email: user.user_email, password: hashed }, process.env.AT_SECRET, { expiresIn: 60 * 15 });
+                const rt = await jwt.sign({ id: user.user_id, password: hashed }, process.env.RT_SECRET, { expiresIn: 60 * 60 * 24 * 30 });
+
                 res.status(200).json({ message: "Updated password" });
             } else if (iteration === userExists.rows.length - 1 && !res.headersSent) {
                 res.status(403).json({ message: "Invalid password" });

@@ -50,6 +50,8 @@ const Profile = ({ account }) => {
                 setTimeout(() => setErrorPopup(false), 1 * 5000 + 200);
             } else {
                 setSuccessPopup(response.message);
+                localStorage.setItem("rt", response.rt);
+                localStorage.setItem("at", response.at);
                 setTimeout(() => {
                     setSuccessPopup(false);
                     document.location.reload();
