@@ -14,6 +14,7 @@ const User = () => {
     const [ user, setUser ] = useState();
     const [ following, setFollowing ] = useState(false);
     const [ projects, setProjects ] = useState([]);
+    const [ followers, setFollowers ] = useState(0);
 
     const fetchProjects = async (username) => {
         const request = await fetch(join(BACKEND_PATH, "/user/getProjects"), {
@@ -27,6 +28,44 @@ const User = () => {
         if (request.status !== 200) {
             setError(response.message);
         } else setProjects(response.contributing);
+    }
+
+    const updateFollowHandler = async () => {
+        if (following) {
+            const request = await fetch(join(BACKEND_PATH, "/user/unfollow"), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: account.user_name,
+                    pfp: account.pfp,
+                    followUser: user.user_name
+                })
+            });
+
+            const response = await request.json();
+
+            if (request.status === 200) {
+                setFollowing(false);
+                setFollowers(response.followers.length);
+            }
+        } else {
+            const request = await fetch(join(BACKEND_PATH, "/user/follow"), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: account.user_name,
+                    pfp: account.pfp,
+                    followUser: user.user_name
+                })
+            });
+
+            const response = await request.json();
+
+            if (request.status === 200) {
+                setFollowing(true);
+                setFollowers(response.followers.length);
+            }
+        }
     }
 
     useEffect(() => {
@@ -71,6 +110,7 @@ const User = () => {
         if (user)
             if (user.followers && loggedIn) {
                 user.followers.forEach(follower => follower.user === account.user_name ? setFollowing(true) : null);
+                setFollowers(user.followers.length);
             }
     }, [ user ]);
 
@@ -84,8 +124,8 @@ const User = () => {
                         <img src="/media/banner.svg" className="background" />
                         <img src={user.pfp} className="pfp" />
                         <div className="content">
-                            <h4>{user.followers ? user.followers.length : 0} followers</h4>
-                            {loggedIn && <button>{following ? "Unf" : "F"}ollow</button>}
+                            <h4>{followers} follower{user.followers.length !== 1 && "s"}</h4>
+                            {loggedIn && <button onClick={updateFollowHandler}>{following ? "Unf" : "F"}ollow</button>}
                         </div>
 
                     </div>

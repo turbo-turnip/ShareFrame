@@ -2019,3 +2019,13 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 .user-project > p {
     margin-top: .5em;
 }
+
+.user-projects .user-project > h4:not(span):hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.user-projects .user-project h4 > span:hover {
+    text-decoration: none !important;
+    cursor: default;
+}
