@@ -5,6 +5,7 @@ const authRouter = require('./routes/auth.route');
 const projectRouter = require('./routes/project.route');
 const accountRouter = require('./routes/account.route');
 const userRouter = require('./routes/user.route');
+const discoverRouter = require('./routes/discover.route');
 const WebSocket = require('ws');
 const { pool: db } = require('./database');
 
@@ -24,6 +25,7 @@ app.use('/auth', authRouter);
 app.use('/project', projectRouter);
 app.use('/account', accountRouter);
 app.use('/user', userRouter);
+app.use('/discover', discoverRouter);
 
 // main ReST API
 app.get('/', (req, res) => {

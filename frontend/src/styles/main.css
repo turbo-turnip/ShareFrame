@@ -2029,3 +2029,47 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     text-decoration: none !important;
     cursor: default;
 }
+
+.discover {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.discover > h1 {
+    text-align: center;
+    width: 100%;
+}
+
+.discover-trending {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.discover-trending .project {
+    flex: 1;
+    background: var(--light-blue);
+    border-radius: 12px;
+    padding: 1em;
+    display: grid;
+    place-items: center;
+    max-width: 300px;
+    min-width: 150px;
+    cursor: pointer;
+}
+
+.discover-trending .project > h4 {
+    font-size: 1.5em;
+}
+
+.discover-trending .project > .project-count {
+    font-size: 5em;
+    font-family: 'Zen Dots';
+}
+
+.discover-trending .project:hover {
+    opacity: 0.8;
+}

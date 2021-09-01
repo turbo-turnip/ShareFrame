@@ -11,6 +11,7 @@ import ThreadPage from './Pages/Project/ProjectViews/ThreadPage';
 import AcceptInvite from './Pages/AcceptInvite';
 import Account from './Pages/Account/Account';
 import User from './Pages/User/User';
+import Discover from './Pages/Discover/Discover';
 
 const App = () => {
     return (
@@ -26,6 +27,7 @@ const App = () => {
                 <Route exact path="/accept-invite" component={AcceptInvite} />
                 <Route exact path="/account" component={Account} />
                 <Route exact path="/user" component={User} />
+                <Route exact path="/discover" component={Discover} />
             </Switch>
         </BrowserRouter>
     );
