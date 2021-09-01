@@ -71,7 +71,7 @@ nav.navbar .nav-links > a {
 nav.navbar .nav-links > a::after {
     content: "";
     width: 0%;
-    height: 2px;
+    height: 3px;
     background: var(--light-blue);
     position: absolute;
     bottom: -8px;
@@ -1932,4 +1932,90 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     border: none;
     margin-left: .5em;
     cursor: pointer;
+}
+
+.user-account {
+    width: 100vw;
+    padding: 12vh 2em 0 2em;
+}
+
+.user-account .user-banner {
+    width: 100%;
+    background: var(--dark-1);
+    height: 200px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-account .user-banner > img:first-of-type {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    z-index: 1;
+}
+
+.user-account .user-banner > img:nth-of-type(2) {
+    height: 80%;
+    z-index: 1;
+    background: #fff;
+    border-radius: 12px;
+    border: 6px solid var(--dark-2);
+}
+
+.user-account .user-banner > .content {
+    position: absolute;
+    right: 100px;
+    z-index: 2;
+}
+
+.user-account .user-banner button {
+    font-size: 1.2em !important;
+    background: var(--light-blue);
+    border: none;
+    padding: .2em 1em;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: .2em;
+}
+
+.user-account .user-banner > .content > * {
+    font-size: 1.8em;
+}
+
+.user-account > h1:not(.url-error) {
+    text-align: center;
+    width: 100%;
+    margin: 1em 0 .5em 0;
+}
+
+.user-account .user-projects {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+}
+
+.user-projects .user-project {
+    width: 400px;
+    background: var(--dark-1);
+    border-radius: 8px;
+    padding: .8em 1em;
+}
+
+.user-projects .user-project h4 > span {
+    margin-left: 1em;
+    background: var(--light-blue);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.user-project > p {
+    margin-top: .5em;
 }

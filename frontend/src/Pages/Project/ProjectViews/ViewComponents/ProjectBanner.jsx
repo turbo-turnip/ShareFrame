@@ -60,7 +60,7 @@ const ProjectBanner = ({ viewsCount, loading, setViewsCount, project, account, l
 
     return (
         <div className="project-banner">
-            <img src="/media/project-banner.svg" alt="Project" />
+            <img src="/media/banner.svg" alt="Project" />
             <h1>{loading ? "Loading..." : (project) && project.project_title}</h1>
             <h4>{loading ? "Loading..." : (project) && project.project_desc_short}</h4>
             {loggedIn && <button className="support" onClick={supportChangeHandler}>{supporting ? "Remove Support" : "Support This Project"}</button>}

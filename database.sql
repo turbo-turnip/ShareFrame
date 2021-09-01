@@ -11,6 +11,7 @@ CREATE TABLE users (
     user_email VARCHAR(100) NOT NULL,
     user_pass VARCHAR(255) NOT NULL,
     pfp TEXT,
+    followers JSON,
     verified VARCHAR(5) NOT NULL
 );
 
