@@ -2040,7 +2040,8 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     width: 100%;
 }
 
-.discover-trending {
+.discover-trending,
+.discover-projects {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -2050,26 +2051,59 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 }
 
 .discover-trending .project {
-    flex: 1;
     background: var(--light-blue);
+}
+
+.discover-projects .project {
+    background: var(--dark-1);
+}
+
+.discover-trending .project,
+.discover-projects .project {
+    flex: 1;
     border-radius: 12px;
     padding: 1em;
     display: grid;
     place-items: center;
     max-width: 300px;
-    min-width: 150px;
+    min-width: 200px;
     cursor: pointer;
+    text-align: center;
 }
 
-.discover-trending .project > h4 {
+.discover-trending .project > h4,
+.discover-projects .project > h4 {
     font-size: 1.5em;
 }
 
-.discover-trending .project > .project-count {
+.discover-trending .project > .project-count,
+.discover-projects .project > .project-count {
     font-size: 5em;
     font-family: 'Zen Dots';
 }
 
-.discover-trending .project:hover {
+.discover-trending .project:hover,
+.discover-projects .project:hover {
     opacity: 0.8;
+}
+
+.discover-projects + button {
+    font-size: 1.5em;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 1em;
+    background: var(--light-blue);
+    padding: .2em 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.discover-projects + button:hover {
+    opacity: 0.8;
+}
+
+.discover-trending + h1 {
+    margin-top: .8em;
 }

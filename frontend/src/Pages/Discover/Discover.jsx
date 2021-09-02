@@ -28,9 +28,7 @@ const Discover = () => {
                     <Trending />
                 </div>
                 <h1>Projects</h1>
-                <div className="discover-projects">
-                    <Projects />
-                </div>
+                <Projects />
             </div>
         </React.Fragment>
     );

@@ -12,7 +12,7 @@ router.get('/trending', async (req, res) => {
         .reduce((acc, supporters) => acc + supporters, 0) 
         / projects.rows.length;
 
-    const trending = projects.rows.filter(project => project.supporters.length > average);
+    const trending = projects.rows.filter(project => project.supporters.length > average).splice(0, 15);
 
     res.status(200).json({ trending });
 });

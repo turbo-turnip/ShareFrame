@@ -20,12 +20,14 @@ const Trending = () => {
 
     return (
         <React.Fragment>
-            {projects && projects.map(project => 
-                <div className="project" onClick={() => document.location.href = join(FRONTEND_PATH, "/project?name=" + project.project_title + "&user=" + project.user_name)}>
-                    <h4>{project.project_title}</h4>
-                    <p className="project-count">{project.supporters ? project.supporters.length : 0}</p>
-                    <span>Supporter{project.supporters ? (project.supporters.length !== 1 && "s") : "s"}</span>
-                </div>)}
+            <div className="discover-projects">
+                {projects && projects.map(project => 
+                    <div className="project" onClick={() => document.location.href = join(FRONTEND_PATH, "/project?name=" + project.project_title + "&user=" + project.user_name)}>
+                        <h4>{project.project_title}</h4>
+                        <p className="project-count">{project.supporters ? project.supporters.length : 0}</p>
+                        <span>Supporter{project.supporters ? (project.supporters.length !== 1 && "s") : "s"}</span>
+                    </div>)}
+            </div>
 
             {!stopLoading && <button onClick={() => setLoadMore(prevState => prevState + 1)}>Load more</button>}
         </React.Fragment>
