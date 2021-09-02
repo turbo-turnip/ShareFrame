@@ -124,7 +124,7 @@ const User = () => {
                         <img src="/media/banner.svg" className="background" />
                         <img src={user.pfp} className="pfp" />
                         <div className="content">
-                            <h4>{followers} follower{user.followers.length !== 1 && "s"}</h4>
+                            <h4>{followers} follower{(following !== null && user.followers.length) !== 1 && "s"}</h4>
                             {loggedIn && <button onClick={updateFollowHandler}>{following ? "Unf" : "F"}ollow</button>}
                         </div>
 

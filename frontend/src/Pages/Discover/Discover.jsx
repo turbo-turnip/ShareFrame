@@ -3,6 +3,7 @@ import isLoggedIn from '../../IsLoggedIn';
 import Nav from '../../Components/Nav';
 import { join, FRONTEND_PATH } from '../../PATH';
 import Trending from './Trending';
+import Projects from './Projects';
 
 const Discover = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
@@ -25,6 +26,10 @@ const Discover = () => {
                 <h1>Trending</h1>
                 <div className="discover-trending">
                     <Trending />
+                </div>
+                <h1>Projects</h1>
+                <div className="discover-projects">
+                    <Projects />
                 </div>
             </div>
         </React.Fragment>

@@ -79,7 +79,7 @@ const Project = () => {
                     .then(res => res.json())
                     .then(res => {
                         if (res.account) {
-                            setOwner(res.account.user_pass === project.user_pass)
+                            setOwner(res.account.user_name === project.user_name);
                         }
                     });
             }

@@ -17,4 +17,15 @@ router.get('/trending', async (req, res) => {
     res.status(200).json({ trending });
 });
 
+router.get('/projects/:amount/:last', async (req, res) => {
+    const { amount, last } = req.params;
+    const projects = await db.query('SELECT * FROM projects');
+
+    const selected = projects.rows.splice(0, amount);
+
+    if (selected.length != last)
+        res.status(200).json({ projects: selected });
+    else res.status(429).json({ message: "Cannot load any more projects" });
+});
+
 module.exports = router;
