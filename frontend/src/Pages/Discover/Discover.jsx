@@ -7,7 +7,7 @@ import Projects from './Projects';
 
 const Discover = () => {
     const [ loggedIn, setLoggedIn ] = useState(false);
-    const [ account, setAccount ] = useState();
+    const [ account, setAccount ] = useState(); 
 
     useEffect(() => {
         isLoggedIn(window.localStorage)
