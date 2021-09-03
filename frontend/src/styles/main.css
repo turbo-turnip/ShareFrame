@@ -1965,18 +1965,37 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     z-index: 1;
 }
 
-.user-account .user-banner > img:nth-of-type(2) {
+.user-account .user-banner > div:not(.content) {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.user-account .user-banner > div:not(.content) img {
     height: 80%;
     z-index: 1;
     background: #fff;
     border-radius: 12px;
     border: 6px solid var(--dark-2);
+    position: relative;
+    order: 1;
+}
+
+.user-account .user-banner > div h4 {
+    z-index: 1;
+    order: 2;
+    font-size: 3em;
+    margin-left: 1em;
 }
 
 .user-account .user-banner > .content {
     position: absolute;
     right: 100px;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .user-account .user-banner button {
@@ -1991,6 +2010,14 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 
 .user-account .user-banner > .content > * {
     font-size: 1.8em;
+}
+
+.user-account .user-banner > .content h1 {
+    order: 1;
+}
+
+.user-account .user-banner > .content button {
+    order: 2;
 }
 
 .user-account > h1:not(.url-error) {
