@@ -1125,6 +1125,11 @@ input[type=checkbox]:not(.poll-checkbox):checked {
     min-width: 100px;
 }
 
+.thread-page .thread-info > span {
+    position: absolute;
+    bottom: 1em;
+}
+
 .thread-message-input {
     position: fixed;
     left: 0;
@@ -2131,4 +2136,12 @@ input[type=checkbox]:not(.poll-checkbox):checked {
 
 .filter-projects button:hover {
     opacity: 0.8;
+}
+
+.user-link {
+    cursor: pointer;
+}
+
+.user-link:hover {
+    text-decoration: underline;
 }

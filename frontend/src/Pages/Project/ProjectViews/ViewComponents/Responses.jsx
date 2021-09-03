@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import QuestionAnswer from './QuestionAnswer';
+import { FRONTEND_PATH, join } from '../../../../PATH';
 
 const Responses = ({ poll, responses }) => {
     return (
@@ -9,7 +10,7 @@ const Responses = ({ poll, responses }) => {
             {responses.map(response => 
                 <div className="poll-response">
                     <img src={response.pfp} alt={response.user} />
-                    <h4>{response.user}</h4>
+                    <h4 className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + response.user)}>{response.user}</h4>
                     {response.answers.map(answer => 
                         <div className="response-answer">
                             <QuestionAnswer answer={answer} />

@@ -1,11 +1,12 @@
 import React from 'react';
+import { FRONTEND_PATH, join } from '../../../../PATH';
 
 const Review = ({ review }) => {
     return (
         <div className="review">
             <img src={review.pfp} alt={review.user} />
             <div className="top">
-                <h4>{review.user}</h4>
+                <h4 className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + review.user)}>{review.user}</h4>
                 <div className="rating">
                     {Array.from({ length: review.review_rating }, () =>
                         <svg xmlns="http://www.w3.org/2000/svg" className="filled-in" viewBox="0 0 20 20" fill="currentColor">

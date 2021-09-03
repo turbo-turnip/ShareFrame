@@ -172,6 +172,7 @@ const ThreadPage = () => {
                     <div className="thread-info">
                         {thread && <h1 data-date-created={thread.date_created}>{thread.subject}</h1>}
                         {thread && <p>{thread.desc}</p>}
+                        {thread && <span>Thread opened by <span className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + thread.user)}>{thread.user}</span></span>}
                     </div>
 
                     {!error && thread &&
@@ -186,7 +187,7 @@ const ThreadPage = () => {
                                 }}>
                                     <div className="top">
                                         <img src={message.pfp} alt={message.user} />
-                                        <span><b>{message.user}</b></span>
+                                        <span className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + message.user)}><b>{message.user}</b></span>
                                     </div>
                                     <p>{message.message}</p>
                                 </div>)}

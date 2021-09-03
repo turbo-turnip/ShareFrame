@@ -3,7 +3,7 @@ import SingleQuestion from './SingleQuestion';
 import TextBoxQuestion from './TextBoxQuestion';
 import MultipleQuestion from './MultipleQuestion';
 import Popup from '../../../../Components/Popup';
-import { BACKEND_PATH, join } from '../../../../PATH';
+import { BACKEND_PATH, join, FRONTEND_PATH } from '../../../../PATH';
 
 const Poll = ({ poll, project, account }) => {
     const questionsRef = useRef();
@@ -72,7 +72,7 @@ const Poll = ({ poll, project, account }) => {
             } else {
                 setSuccessPopup(response.message);
                 setTimeout(() => setSuccessPopup(false), 5000 * 1 + 200);
-                // document.location.reload();
+                document.location.reload();
             }
         } else {
             setErrorPopup("Please fill out the poll before submitting");
@@ -93,7 +93,7 @@ const Poll = ({ poll, project, account }) => {
             {successPopup && <Popup type="success" message={successPopup} />}
             <h1>{poll.title}</h1>
             <h4 style={{ fontSize: "1.2em", fontWeight: "normal", marginBottom: ".5em" }}>{poll.description}</h4>
-            <p>Created by {poll.creator} of {project.project_title}</p>
+            <p>Created by <span className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + poll.creator)}>{poll.creator}</span> of {project.project_title}</p>
             <div className="questions" ref={questionsRef}>
                 {questions.length > 0 ?
                     questions.map((question, i) => 

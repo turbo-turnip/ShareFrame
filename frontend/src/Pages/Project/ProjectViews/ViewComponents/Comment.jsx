@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BACKEND_PATH, join } from '../../../../PATH';
+import { BACKEND_PATH, FRONTEND_PATH, join } from '../../../../PATH';
 
 const Comment = ({ comment, user, pfp, announcement, project, loggedIn }) => {
     const [ upvotes, setUpvotes ] = useState(comment && comment.upvotes && (comment.upvotes.length ? comment.upvotes.length : 0));
@@ -75,7 +75,7 @@ const Comment = ({ comment, user, pfp, announcement, project, loggedIn }) => {
             {comment && 
                 <div className="announcement-comment">
                     <img src={comment.pfp} alt={comment.user} />
-                    <span>{comment.user}</span>
+                    <span className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + comment.user)}>{comment.user}</span>
                     <p>{comment.comment}</p>
                     {loggedIn &&
                         <div className="vote">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { join, BACKEND_PATH } from '../../../../PATH';
+import { join, BACKEND_PATH, FRONTEND_PATH } from '../../../../PATH';
 
 const Bug = ({ bug, member, account, project, setBugs }) => {
     const bugSolveHandler = async () => {
@@ -27,7 +27,7 @@ const Bug = ({ bug, member, account, project, setBugs }) => {
         <div className="bug">
             <div className="user">
                 <img src={bug.pfp} alt={bug.pfp} />
-                <h4>{bug.user}</h4>
+                <h4 className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + bug.user)}>{bug.user}</h4>
             </div>
             <div className="top">
                 <span className="version">{bug.version}</span>

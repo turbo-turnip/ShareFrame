@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FRONTEND_PATH, join } from '../../../../PATH';
  
 const PollPreview = ({ poll, answerPollHandler, member, viewResponsesHandler }) => {
     const [ questions, setQuestions ] = useState(0);
@@ -15,10 +16,9 @@ const PollPreview = ({ poll, answerPollHandler, member, viewResponsesHandler }) 
 
     return (
         <div className="poll-preview">
-            {console.log(poll)}
             <div className="user">
                 <img src={poll.pfp} alt={poll.creator} />
-                <h4>{poll.creator}</h4>
+                <h4 className="user-link" onClick={() => document.location.href = join(FRONTEND_PATH, "/user?name=" + poll.creator)}>{poll.creator}</h4>
             </div>
             <h4>{poll.title}</h4>
             <p>{poll.description}</p>
