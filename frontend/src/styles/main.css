@@ -2289,3 +2289,55 @@ input[type=checkbox]:not(.poll-checkbox):checked {
         margin-top: 20px;
     }
 }
+
+@media (max-width: 750px) {
+    .user-banner > div:not(.content) h4 {
+        font-size: 2em !important;
+        margin-left: 10px !important;
+    }
+
+    .user-banner > div:not(.content) img {
+        height: 70% !important;
+    }
+
+    .user-banner .content button {
+        font-size: 1em !important;
+    }
+
+    .user-banner .content h4 {
+        font-size: 1.5em !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .user-banner > div:not(.content) {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-self: center;
+        justify-content: center;
+    }
+
+    .user-banner > div:not(.content) h4 {
+        order: 1;
+        font-size: 1.5em !important;
+        margin-bottom: 5px;
+    }
+
+    .user-banner > div:not(.content) img {
+        order: 2;
+    }
+}
+
+@media (max-width: 500px) {
+    .user-banner {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-direction: row !important;
+    }
+
+    .user-banner > div {
+        position: relative !important;
+        inset: 0 !important;
+    }
+}
