@@ -51,7 +51,7 @@ const Bug = ({ bug, member, account, project, setBugs }) => {
                         });
                     }} />)}
             </details>
-            {member && <span className="solved" onClick={bugSolveHandler}>Bug Solved</span>}
+            {member && <span className="solved" onClick={bugSolveHandler}>Mark Solved</span>}
         </div>
     );
 }
